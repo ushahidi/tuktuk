@@ -4,3 +4,12 @@
 node_modules/
 platforms/
 plugins/
+*.log
+.*swp
+*~
+*.DS_Store
+*.log
+*.cache
+*.sublime-*
+.env
+.idea
