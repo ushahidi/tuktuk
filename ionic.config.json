@@ -1,4 +1,6 @@
 {
-  "name": "sync",
-  "app_id": ""
+  "name": "tuktuk",
+  "app_id": "",
+  "v2": true,
+  "typescript": true
 }
