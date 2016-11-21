@@ -4,13 +4,14 @@ import { Tuktuk } from './app.component';
 import { TabsPage } from '../pages/tabs';
 import { LocationsPage } from '../pages/locations';
 import { ReportsPage } from '../pages/reports';
+import { CreateReportPage } from '../pages/reports';
 import { ContactsPage } from '../pages/contacts';
 
 @NgModule({
-  declarations: [Tuktuk, TabsPage, ReportsPage, LocationsPage, ContactsPage  ],
+  declarations: [Tuktuk, TabsPage, ReportsPage, CreateReportPage, LocationsPage, ContactsPage  ],
   imports: [ IonicModule.forRoot(Tuktuk)],
   bootstrap: [IonicApp],
-  entryComponents: [Tuktuk, TabsPage, ReportsPage, LocationsPage, ContactsPage ],
+  entryComponents: [Tuktuk, TabsPage, ReportsPage, CreateReportPage, LocationsPage, ContactsPage ],
   providers: []
 })
 
