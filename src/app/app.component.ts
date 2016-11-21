@@ -2,14 +2,14 @@ import { Component } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 
-import { Tabs } from '../pages/tabs';
+import { TabsPage } from '../pages/tabs';
 
 
 @Component({
   template: `<ion-nav [root]="rootPage"></ion-nav>`
 })
 export class Tuktuk {
-  rootPage = Tabs;
+  rootPage = TabsPage;
 
   constructor(platform: Platform) {
     platform.ready().then(() => {
