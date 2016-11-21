@@ -1,1 +1,0 @@
-export { TabsPage } from './TabsPage';
