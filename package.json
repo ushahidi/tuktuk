@@ -1,7 +1,8 @@
 {
   "name": "@ushahidi/tuktuk",
   "author": "Moses Ngone <moses@brck.com>",
-  "version": "0.0.1",  
+  "description": "TukTuk: An Ushahidi app",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "ionic:build": "ionic-app-scripts build",
@@ -20,29 +21,20 @@
     "@ionic/storage": "1.1.6",
     "ionic-angular": "2.0.0-rc.2",
     "ionic-native": "2.2.3",
+    "ionic2-autosize": "^1.0.2",
     "ionicons": "3.0.0",
     "rxjs": "5.0.0-beta.12",
+    "ushahidi-platform-pattern-library": "^3.6.3",
     "zone.js": "0.6.21"
   },
   "devDependencies": {
     "@ionic/app-scripts": "0.0.42",
+    "gulp": "^3.9.1",
     "typescript": "2.0.6"
   },
-  "cordovaPlugins": [
-    "cordova-plugin-device",
-    "cordova-plugin-console",
-    "cordova-plugin-whitelist",
-    "cordova-plugin-splashscreen",
-    "cordova-plugin-statusbar",
-    "ionic-plugin-keyboard"
-  ],
-  "cordovaPlatforms": [
-    "ios",
-    {
-      "platform": "ios",
-      "version": "",
-      "locator": "ios"
-    }
-  ],
-  "description": "tuktuk: An Ionic project"
+  "cordovaPlugins": [],
+  "config": {
+    "ionic_sass": "./config/sass.config.js"
+  },
+  "cordovaPlatforms": []
 }
