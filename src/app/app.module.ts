@@ -10,7 +10,10 @@ import { CreateReportPage } from '../pages/reports';
     ReportsPage,
     CreateReportPage
   ],
-  imports: [ IonicModule.forRoot(Tuktuk)],
+  imports: [ IonicModule.forRoot(Tuktuk,{
+    backButtonText: '',
+    backButtonIcon: 'close'
+  })],
   bootstrap: [IonicApp],
   entryComponents: [
     Tuktuk,

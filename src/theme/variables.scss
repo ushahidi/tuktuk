@@ -1,6 +1,6 @@
-// Ionic Variables and Theming. For more info, please see:
-// http://ionicframework.com/docs/v2/theming/
-@import "ionic.globals";
+
+@import "ionic-angular/themes/ionic.globals";
+
 
 
 // Shared Variables
@@ -10,7 +10,7 @@
 // To view all the possible Ionic variables, see:
 // http://ionicframework.com/docs/v2/theming/overriding-ionic-variables/
 
-$text-color:        #000;
+$text-color:        #333;
 $background-color:  #fff;
 
 
@@ -21,7 +21,7 @@ $background-color:  #fff;
 // to match your app's branding. Ionic uses a Sass map of
 // colors so you can add, rename and remove colors as needed.
 // The "primary" color is the only required color in the map.
-
+//
 $colors: (
   primary:    #387ef5,
   secondary:  #32db64,
@@ -59,7 +59,7 @@ $colors: (
 // so that the above variables are used and Ionic's
 // default are overridden.
 
-@import "ionic.theme.default";
+// @import "ionic-angular/themes/ionic.theme.dark";
 
 
 // Ionicons
@@ -68,4 +68,4 @@ $colors: (
 // http://ionicframework.com/docs/v2/ionicons/
 
 $ionicons-font-path: "../assets/fonts";
-@import "ionicons";
+@import "ionicons/dist/scss/ionicons";

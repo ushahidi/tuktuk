@@ -1,19 +1,35 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Create Report
+      Report
     </ion-title>
+    <ion-buttons end>
+       <button ion-button type="submit" form="report">
+         <ion-icon name="send"></ion-icon>
+       </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 <ion-content padding>
-  <h2>Create Report </h2>
-  <p>
-    This starter project comes with simple tabs-based layout for apps
-    that are going to primarily use a Tabbed UI.
-  </p>
-  <p>
-    Take a look at the <code>src/pages/</code> directory to add or change tabs,
-    update any existing page or create new pages.
-  </p>
+  <form id="report" [formGroup]="report" (ngSubmit)="logForm()">
+     <ion-item>
+       <ion-label floating>Describe the problem</ion-label>
+       <ion-textarea autosize formControlName="description"></ion-textarea>
+     </ion-item>
+     <ion-item>
+       <ion-label floating><ion-icon name="locate"></ion-icon> Where is the problem</ion-label>
+       <ion-textarea autosize formControlName="address"></ion-textarea>
+     </ion-item>
+     <ion-item>
+       <ion-label floating><ion-icon name="time"></ion-icon> What time did you last see the problem?</ion-label>
 
+       <ion-datetime displayFormat="h:mm A" formControlName="time"></ion-datetime>
+     </ion-item>
+     <ion-item>
+       <ion-label floating><ion-icon name="calendar"></ion-icon> What date did you last see the problem?</ion-label>
+       <ion-datetime displayFormat="MMM DD, YYYY" formControlName="date"></ion-datetime>
+     </ion-item>
+     <button ion-button (click)="takePicture()"><ion-icon name="camera"></ion-icon>take pic </button>
+     <img [src]="pic" *ngIf="pic" />
+   </form>
 </ion-content>
