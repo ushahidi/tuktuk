@@ -3,6 +3,7 @@ import { IonicApp, IonicModule } from 'ionic-angular';
 import { Tuktuk } from './app.component';
 import { ReportsPage } from '../pages/reports';
 import { CreateReportPage } from '../pages/reports';
+import { ReportProvider } from '../providers/report-provider';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,7 @@ import { CreateReportPage } from '../pages/reports';
     ReportsPage,
     CreateReportPage
   ],
-  providers: []
+  providers: [ ReportProvider ]
 })
 
 export class AppModule {}

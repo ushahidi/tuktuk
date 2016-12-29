@@ -4,14 +4,14 @@
       Report
     </ion-title>
     <ion-buttons end>
-       <button ion-button type="submit" form="report">
+       <button ion-button type="submit" form="reportForm">
          <ion-icon name="send"></ion-icon>
        </button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
 <ion-content padding>
-  <form id="report" [formGroup]="report" (ngSubmit)="logForm()">
+  <form id="reportForm" [formGroup]="reportForm" (ngSubmit)="save()">
      <ion-item>
        <ion-label floating>Describe the problem</ion-label>
        <ion-textarea autosize formControlName="description"></ion-textarea>
@@ -29,7 +29,11 @@
        <ion-label floating><ion-icon name="calendar"></ion-icon> What date did you last see the problem?</ion-label>
        <ion-datetime displayFormat="MMM DD, YYYY" formControlName="date"></ion-datetime>
      </ion-item>
-     <button ion-button (click)="takePicture()"><ion-icon name="camera"></ion-icon>take pic </button>
-     <img [src]="pic" *ngIf="pic" />
+     <!-- <ion-item>
+       <ion-label floating><ion-icon name="camera"></ion-icon> Photo of the problem?</ion-label>
+       <ion-input type="file" formControlName="photo"></ion-input>
+     </ion-item> -->
+     <button ion-button (click)="takePicture()"><ion-icon name="camera"></ion-icon> Photo </button>
+     <img [src]="photo" *ngIf="photo" />
    </form>
 </ion-content>

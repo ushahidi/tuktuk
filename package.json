@@ -18,23 +18,21 @@
     "@angular/platform-browser": "2.1.1",
     "@angular/platform-browser-dynamic": "2.1.1",
     "@angular/platform-server": "2.1.1",
-    "@ionic/storage": "1.1.6",
-    "ionic-angular": "2.0.0-rc.2",
-    "ionic-native": "2.2.3",
-    "ionic2-autosize": "^1.0.2",
+    "@ionic/storage": "^1.1.6",
+    "ionic-angular": "2.0.0-rc.4",
+    "ionic-native": "2.2.13",
     "ionicons": "3.0.0",
     "rxjs": "5.0.0-beta.12",
     "ushahidi-platform-pattern-library": "^3.6.3",
+    "uuid": "^3.0.1",
     "zone.js": "0.6.21"
   },
   "devDependencies": {
     "@ionic/app-scripts": "0.0.42",
-    "gulp": "^3.9.1",
+    "standard": "^8.6.0",
     "typescript": "2.0.6"
   },
-  "cordovaPlugins": [],
   "config": {
     "ionic_sass": "./config/sass.config.js"
-  },
-  "cordovaPlatforms": []
+  }
 }

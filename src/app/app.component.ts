@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
-
 import { ReportsPage } from '../pages/reports';
 
 
@@ -13,10 +12,23 @@ export class Tuktuk {
 
   constructor(platform: Platform) {
     platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
       StatusBar.styleDefault();
       Splashscreen.hide();
+
+      // const dbStorage = new SQLite();
+      // dbStorage
+      // .openDatabase({ name: "data.db", location: "default" })
+      // .then(() => {
+      //   dbStorage
+      //   .executeSql("CREATE TABLE IF NOT EXISTS reports (id BLOB PRIMARY KEY, description TEXT, address TEXT)", [])
+      //   .catch((error) => {
+      //     console.error('Unable to execute sql: ', error);
+      //   })
+      // })
+      // .catch((error) => {
+      //   console.error('Unable to open database: ', error);
+      // })
+
     });
   }
 }
