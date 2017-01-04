@@ -33,7 +33,5 @@
   },
   "config": {
     "ionic_sass": "./config/sass.config.js"
-  },
-  "cordovaPlugins": [],
-  "cordovaPlatforms": []
+  }
 }
