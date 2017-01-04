@@ -28,11 +28,13 @@
     "zone.js": "0.6.21"
   },
   "devDependencies": {
-    "@ionic/app-scripts": "0.0.42",
+    "@ionic/app-scripts": "0.0.48",
     "standard": "^8.6.0",
     "typescript": "2.0.6"
   },
   "config": {
     "ionic_sass": "./config/sass.config.js"
-  }
+  },
+  "cordovaPlugins": [],
+  "cordovaPlatforms": []
 }
