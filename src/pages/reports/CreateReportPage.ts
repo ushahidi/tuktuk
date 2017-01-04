@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { ReportsPage } from '../reports';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ReportProvider } from '../../providers/report-provider';
 import { Camera } from 'ionic-native';
@@ -29,15 +28,11 @@ export class CreateReportPage {
   }
 
   save() {
-    this.store
-    .set(this.reportForm.value.description,this.reportForm.value.address)
-    .then((result)=>{
-      console.info('RESULT ON SAVE',JSON.stringify(result))
-      this.navCtrl.push(ReportsPage)
-    })
-    .catch((error)=> {
-      console.error(error)
-    })
+    this.navCtrl.pop()
+    // this.store
+    // .add(this.reportForm.value.description,this.reportForm.value.address)
+    // .then(() => this.navCtrl.pop())
+    // .catch((error) => console.error(error))
 
   }
 
