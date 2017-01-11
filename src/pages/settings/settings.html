@@ -1,0 +1,24 @@
+<ion-list radio-group [(ngModel)]="mode" (ionChange)="setMode()">
+  <ion-list-header>
+    MODE
+  </ion-list-header>
+  <ion-item>
+    <ion-label>Wifi</ion-label>
+    <ion-radio value="wifi"></ion-radio>
+  </ion-item>
+  <ion-item>
+    <ion-label>Native</ion-label>
+    <ion-radio value="native"></ion-radio>
+  </ion-item>
+  <ion-item>
+    <ion-label>Both</ion-label>
+    <ion-radio value="both"></ion-radio>
+  </ion-item>
+</ion-list>
+<ion-list-header>
+  THALI
+</ion-list-header>
+<ion-item no-lines>
+  <ion-label>Thali</ion-label>
+  <ion-toggle [(ngModel)]="thali" (ionChange)="setState()"></ion-toggle>
+ </ion-item>

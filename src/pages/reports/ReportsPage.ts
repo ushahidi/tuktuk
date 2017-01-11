@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, PopoverController } from 'ionic-angular';
 import { CreateReportPage } from './CreateReportPage';
+import { SettingsPage } from '../settings/SettingsPage';
 import { ReportProvider } from '../../providers/report-provider';
 
 @Component({
@@ -14,7 +15,8 @@ export class ReportsPage {
 
     constructor(
         private navCtrl: NavController,
-        private store: ReportProvider
+        private store: ReportProvider,
+        public popoverCtrl: PopoverController
     ) { }
 
     ionViewDidLoad() {
@@ -25,6 +27,11 @@ export class ReportsPage {
         //   console.info('REPORTS DATA',JSON.stringify(reportsData))
         //     // this.reports = reportsData;
         // });
+    }
+
+    displaySettings(event) {
+      let popover = this.popoverCtrl.create(SettingsPage);
+      popover.present({ ev: event });
     }
 
 }

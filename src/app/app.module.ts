@@ -1,15 +1,16 @@
 import { NgModule } from '@angular/core';
 import { IonicApp, IonicModule } from 'ionic-angular';
 import { Tuktuk } from './app.component';
-import { ReportsPage } from '../pages/reports';
-import { CreateReportPage } from '../pages/reports';
+import { ReportsPage, CreateReportPage } from '../pages/reports';
+import { SettingsPage } from '../pages/settings';
 import { ReportProvider } from '../providers/report-provider';
 
 @NgModule({
   declarations: [
     Tuktuk,
     ReportsPage,
-    CreateReportPage
+    CreateReportPage,
+    SettingsPage
   ],
   imports: [ IonicModule.forRoot(Tuktuk,{
     backButtonText: '',
@@ -19,7 +20,8 @@ import { ReportProvider } from '../providers/report-provider';
   entryComponents: [
     Tuktuk,
     ReportsPage,
-    CreateReportPage
+    CreateReportPage,
+    SettingsPage
   ],
   providers: [ ReportProvider ]
 })

@@ -1,8 +1,8 @@
 'use strict';
 
-console.log('TestApp started');
+console.log('TukTuk started');
 
-// process.env.DEBUG = 'thalisalti:acl';
+process.env.DEBUG = 'thalisalti:acl';
 process.env.SSDP_NT = 'random-ssdp-nt:' + require('./SSDP');
 
 process
@@ -79,7 +79,7 @@ Mobile('initThali').registerSync(function (deviceId, mode) {
 
     Mobile.getDocumentsPath(function(err, location) {
         if (err) {
-            console.log('TestApp Error getting path');
+            console.log('TukTuk Error getting path');
             return;
         }
         else {
@@ -89,7 +89,7 @@ Mobile('initThali').registerSync(function (deviceId, mode) {
                 fs.mkdirSync(dbPrefix);
             }
 
-            console.log('TestApp initialize thali');
+            console.log('TukTuk initialize thali');
             PouchDB = PouchDBGenerator(PouchDB, dbPrefix + '/', {
                 defaultAdapter: LeveldownMobile
             });
@@ -118,13 +118,13 @@ Mobile('initThali').registerSync(function (deviceId, mode) {
             var registerLocalDBChanges = function () {
                 return localDB.changes(options)
                     .on('change', function(data) {
-                        console.log("TestApp got " + data.doc._id);
+                        console.log("TukTuk got " + data.doc._id);
                         if (data.doc._id.indexOf("TestAtt") > -1) {
                             localDB.getAttachment(data.doc._id, 'attachment')
                                 .then(function (attachmentBuffer) {
                                     Mobile('dbChange').call(attachmentBuffer.toString());
                                 }).catch(function (err) {
-                                console.log("TestApp error getting attachment: " + err);
+                                console.log("TukTuk error getting attachment: " + err);
                             });
                         } else {
                             Mobile('dbChange').call(data.doc.content);
@@ -143,12 +143,12 @@ Mobile('initThali').registerSync(function (deviceId, mode) {
 });
 
 Mobile('startThali').registerSync(function () {
-    console.log('TestApp start thali');
+    console.log('TukTuk start thali');
     manager.start(keysToUse);
 });
 
 Mobile('stopThali').registerSync(function () {
-    console.log('TestApp stop thali');
+    console.log('TukTuk stop thali');
     manager.stop();
 });
 
@@ -160,10 +160,10 @@ Mobile('addData').registerSync(function (data) {
     };
     localDB.put(doc)
         .then(function () {
-            console.log('TestApp inserted doc');
+            console.log('TukTuk inserted doc');
         })
         .catch(function (error) {
-            console.log('TestApp error while adding data: \'%s\'', error);
+            console.log('TukTuk error while adding data: \'%s\'', error);
         });
 });
 

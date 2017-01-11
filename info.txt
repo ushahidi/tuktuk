@@ -1,4 +1,4 @@
-Node version: v7.2.1
+Node version: v6.9.2
 
 Cordova version: 6.4.0
 

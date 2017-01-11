@@ -7,11 +7,8 @@
 *.tmp
 *.tmp.*
 log.txt
-*.sublime-project
-*.sublime-workspace
+*.sublime-*
 .vscode/
-npm-debug.log*
-
 .idea/
 .sass-cache/
 .tmp/
@@ -24,10 +21,11 @@ temp/
 hooks/
 platforms/
 plugins/
-plugins/android.json
-plugins/ios.json
 $RECYCLE.BIN/
-
 .DS_Store
 Thumbs.db
 UserInterfaceState.xcuserstate
+thaliDontCheckIn
+www/jxcore/node_modules/
+www/jxcore/SSDP.js
+info.txt
