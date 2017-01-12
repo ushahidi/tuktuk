@@ -27,10 +27,9 @@ export class CreateReportPage {
     })
   }
 
-  save() {
-    console.info('REPORT', this.reportForm.value)
+  save() {    
     this.reportService.add(this.reportForm.value)
-    this.navCtrl.pop()  
+    this.navCtrl.pop()
   }
 
   // takePicture() {

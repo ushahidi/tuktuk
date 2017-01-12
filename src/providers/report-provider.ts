@@ -15,13 +15,6 @@ export class ReportProvider {
 
   private initLocalDb() {
     this.db = new PouchDB('tuktuk');
-    this.remote = 'http://localhost:5984/tuktuk';
-    let options = {
-      live: true,
-      retry: true,
-      continuous: true
-    };
-    this.db.sync(this.remote, options);
   }
 
   private initJXCoreStore() {
@@ -59,7 +52,7 @@ export class ReportProvider {
 
         this.data = [];
 
-        let doc = result.rows.map((row) => {
+        result.rows.map((row) => {
           this.data.push(row.doc);
         });
 
