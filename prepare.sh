@@ -10,7 +10,7 @@ export JX_NPM_JXB
 ../Thali_CordovaPlugin/thali/install/setUpDesktop.sh
 
 mkdir -p thaliDontCheckIn/localdev
-cordova platform remove ios android
+cordova platform rm ios android
 cordova platform add ios android
 
 cd www/jxcore

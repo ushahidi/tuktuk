@@ -1,70 +1,124 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import uuid from 'uuid/v4';
+import PouchDB from 'pouchdb';
 
-/*
-Generated class for the ReportProvider provider.
-
-See https://angular.io/docs/ts/latest/guide/dependency-injection.html
-for more info on providers and Angular 2 DI.
-*/
 @Injectable()
 export class ReportProvider {
 
+  data: any;
+  db: any;
+  remote: any;
   constructor() {
+    this.initLocalDb();
+    // this.initJXCoreStore();
+  }
 
-    // const db = new SQLite();
-    // db.openDatabase({ name: "data.db", location: "default" })
-    // .then(() => {
-    //   db.executeSql("CREATE TABLE IF NOT EXISTS reports (id INTEGER PRIMARY KEY AUTOINCREMENT, description TEXT, address TEXT)", [])
-    //   .catch((error) => {
-    //     console.error('Unable to execute sql: ', error);
-    //   })
-    // })
-    // .then(() => {
-    //   console.info('DB OPENED SUCCESSFULLY')
-    // })
-    // .catch((error) => {
-    //   console.error('Unable to open database: ', error);
-    // })
-    // this.storage = db;
+  private initLocalDb() {
+    this.db = new PouchDB('tuktuk');
+    this.remote = 'http://localhost:5984/tuktuk';
+    let options = {
+      live: true,
+      retry: true,
+      continuous: true
+    };
+    this.db.sync(this.remote, options);
+  }
 
+  private initJXCoreStore() {
+    (<any>window).jxcore.isReady(() => {
+      console.info('JXCORE IS READY');
+      if ((<any>window).window.ThaliPermissions) {
+        (<any>window).window.ThaliPermissions.requestLocationPermission(() => {
+
+          (<any>window).jxcore('app.js').loadMainFile(function(ret, err) {
+            console.log('jxcore loaded')
+            this.init();
+          })
+        }, function(error) {
+          console.error(`Location permission not granted. Error: ${error}`)
+        })
+
+      } else {
+        (<any>window).jxcore('app.js').loadMainFile(function(ret, err) {
+          console.log('jxcore loaded')
+          this.init();
+        })
+      }
+    })
   }
 
   public fetch() {
-    // return new Promise((resolve, reject) => {
-    //   this.storage.executeSql("SELECT * FROM reports", []).then((data) => {
-    //     let reports = [];
-    //     if (data.rows.length > 0) {
-    //       for (let i = 0; i < data.rows.length; i++) {
-    //         reports.push({
-    //           id: data.rows.item(i).id,
-    //           firstname: data.rows.item(i).description,
-    //           lastname: data.rows.item(i).address
-    //         });
-    //       }
-    //     }
-    //     console.log(`REPORTS ${reports}`)
-    //     resolve(reports);
-    //   }, (error) => {
-    //     reject(error);
-    //   });
-    // });
+    if (this.data) {
+      return Promise.resolve(this.data);
+    }
+
+    return new Promise(resolve => {
+      this.db.allDocs({
+        include_docs: true
+      }).then((result) => {
+
+        this.data = [];
+
+        let doc = result.rows.map((row) => {
+          this.data.push(row.doc);
+        });
+
+        resolve(this.data);
+
+        this.db.changes({ live: true, since: 'now', include_docs: true }).on('change', (change) => {
+          this.handleChange(change);
+        });
+
+      }).catch((error) => {
+        console.error(error);
+      });
+
+    });
   }
 
-  public add(description: string, address: string) {
-    const id = uuid();
-    console.info(`SAVING ID: ${id}`)
-    // return new Promise((resolve, reject) => {
-    //   this.storage
-    //   .executeSql("INSERT INTO reports (description, address) VALUES (?, ?)", [ description, address])
-    //   .then((data) => {
-    //     console.log(`INSERTED DATA: ${JSON.stringify(data)}`)
-    //     resolve(data);
-    //   }, (error) => {
-    //     reject(error);
-    //   });
-    // });
+  public add(report) {
+    this.db.post(report);
+  }
+
+  public delete(report) {
+    this.db.remove(report).catch((err) => {
+      console.error(err);
+    });
+  }
+
+  public update(report) {
+    this.db.put(report).catch((err) => {
+      console.error(err);
+    });
+  }
+
+  public handleChange(change) {
+    let changedDoc = null;
+    let changedIndex = null;
+
+    this.data.forEach((doc, index) => {
+      if (doc._id === change.id) {
+        changedDoc = doc;
+        changedIndex = index;
+      }
+    });
+
+
+    if (change.deleted) {
+      // A document was deleted
+      this.data.splice(changedIndex, 1);
+    } else {
+
+      if (changedDoc) {
+        // A document was updated
+        this.data[changedIndex] = change.doc;
+      } else {
+        // A document was added
+        this.data.push(change.doc);
+      }
+
+    }
   }
 
 }

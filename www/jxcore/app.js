@@ -1,5 +1,5 @@
 'use strict';
-
+console.info(Mobile);
 console.log('TukTuk started');
 
 process.env.DEBUG = 'thalisalti:acl';
@@ -105,39 +105,41 @@ Mobile('initThali').registerSync(function (deviceId, mode) {
 
             localDB = new PouchDB('testdb');
 
-            var options = {
-                since: 'now',
-                live: true,
-                timeout: false,
-                include_docs: true,
-                attachments: true,
-                binary: true,
-                batch_size: 40
-            };
+            // create new express pouchdb instance
+            //
+            // var options = {
+            //     since: 'now',
+            //     live: true,
+            //     timeout: false,
+            //     include_docs: true,
+            //     attachments: true,
+            //     binary: true,
+            //     batch_size: 40
+            // };
 
-            var registerLocalDBChanges = function () {
-                return localDB.changes(options)
-                    .on('change', function(data) {
-                        console.log("TukTuk got " + data.doc._id);
-                        if (data.doc._id.indexOf("TestAtt") > -1) {
-                            localDB.getAttachment(data.doc._id, 'attachment')
-                                .then(function (attachmentBuffer) {
-                                    Mobile('dbChange').call(attachmentBuffer.toString());
-                                }).catch(function (err) {
-                                console.log("TukTuk error getting attachment: " + err);
-                            });
-                        } else {
-                            Mobile('dbChange').call(data.doc.content);
-                        }
-                    })
-                    .on('error', function (err) {
-                        console.log(err);
-                        localDBchanges.cancel();
-                        localDBchanges = registerLocalDBChanges();
-                    });
-            };
-
-            localDBchanges = registerLocalDBChanges();
+            // var registerLocalDBChanges = function () {
+            //     return localDB.changes(options)
+            //         .on('change', function(data) {
+            //             console.log("TukTuk got " + data.doc._id);
+            //             if (data.doc._id.indexOf("TestAtt") > -1) {
+            //                 localDB.getAttachment(data.doc._id, 'attachment')
+            //                     .then(function (attachmentBuffer) {
+            //                         Mobile('dbChange').call(attachmentBuffer.toString());
+            //                     }).catch(function (err) {
+            //                     console.log("TukTuk error getting attachment: " + err);
+            //                 });
+            //             } else {
+            //                 Mobile('dbChange').call(data.doc.content);
+            //             }
+            //         })
+            //         .on('error', function (err) {
+            //             console.log(err);
+            //             localDBchanges.cancel();
+            //             localDBchanges = registerLocalDBChanges();
+            //         });
+            // };
+            //
+            // localDBchanges = registerLocalDBChanges();
         }
     });
 });

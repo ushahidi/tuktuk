@@ -5,6 +5,7 @@ import { ReportsPage, CreateReportPage } from '../pages/reports';
 import { SettingsPage } from '../pages/settings';
 import { ReportProvider } from '../providers/report-provider';
 
+
 @NgModule({
   declarations: [
     Tuktuk,
