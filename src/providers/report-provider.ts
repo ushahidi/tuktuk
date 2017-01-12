@@ -1,20 +1,22 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import PouchDB from 'pouchdb';
+import { Storage } from '@ionic/storage';
 
 @Injectable()
 export class ReportProvider {
 
-  data: any;
-  db: any;
-  remote: any;
+  private data: any;
+  private store: any;
+  // private remote: any;
+
   constructor() {
     this.initLocalDb();
     // this.initJXCoreStore();
   }
 
   private initLocalDb() {
-    this.db = new PouchDB('tuktuk');
+    this.store = new PouchDB('tuktuk');
   }
 
   private initJXCoreStore() {
@@ -46,7 +48,7 @@ export class ReportProvider {
     }
 
     return new Promise(resolve => {
-      this.db.allDocs({
+      this.store.allDocs({
         include_docs: true
       }).then((result) => {
 
@@ -58,7 +60,7 @@ export class ReportProvider {
 
         resolve(this.data);
 
-        this.db.changes({ live: true, since: 'now', include_docs: true }).on('change', (change) => {
+        this.store.changes({ live: true, since: 'now', include_docs: true }).on('change', (change) => {
           this.handleChange(change);
         });
 
@@ -70,17 +72,17 @@ export class ReportProvider {
   }
 
   public add(report) {
-    this.db.post(report);
+    this.store.post(report);
   }
 
   public delete(report) {
-    this.db.remove(report).catch((err) => {
+    this.store.remove(report).catch((err) => {
       console.error(err);
     });
   }
 
   public update(report) {
-    this.db.put(report).catch((err) => {
+    this.store.put(report).catch((err) => {
       console.error(err);
     });
   }
