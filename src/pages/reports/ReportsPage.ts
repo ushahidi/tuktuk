@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { NavController, PopoverController } from 'ionic-angular';
+import { NavController } from 'ionic-angular';
 import { CreateReportPage } from './CreateReportPage';
-import { SettingsPage } from '../settings/SettingsPage';
-import { ReportProvider } from '../../providers/report-provider';
+import { SettingsPage } from '../settings';
+import { ReportProvider } from '../../providers';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'page-reports',
@@ -11,24 +12,30 @@ import { ReportProvider } from '../../providers/report-provider';
 export class ReportsPage {
 
   createReport = CreateReportPage;
+  settings = SettingsPage;
   reports: any;
 
   constructor(
     private navCtrl: NavController,
     private reportService: ReportProvider,
-    public popoverCtrl: PopoverController
+    private storage: Storage
   ) { }
 
   ionViewDidLoad() {
+    this.storage
+      .get('deviceId')
+      .then((deviceId) => {
+        if(deviceId === null){
+          this.navCtrl.push(this.settings);
+        }        
+      })
+  }
+
+  ionViewWillEnter() {
     console.info('LOADING DATA');
     this.reportService.fetch().then((data) => {
       this.reports = data;
     });
-  }
-
-  displaySettings(event) {
-    let popover = this.popoverCtrl.create(SettingsPage);
-    popover.present({ ev: event });
   }
 
 }

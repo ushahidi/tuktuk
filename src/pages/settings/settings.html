@@ -1,24 +1,54 @@
-<ion-list radio-group [(ngModel)]="mode" (ionChange)="setMode()">
-  <ion-list-header>
-    MODE
-  </ion-list-header>
-  <ion-item>
-    <ion-label>Wifi</ion-label>
-    <ion-radio value="wifi"></ion-radio>
+<ion-header>
+  <ion-navbar>
+    <ion-title> Settings </ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      DEVICE
+    </ion-card-header>
+    <ion-item *ngIf="deviceId == null" >
+      <p> Please select a thali device </p>
+    </ion-item>
+    <ion-list radio-group [(ngModel)]="deviceId" (ionChange)="setDeviceId()">
+      <ion-item>
+        <ion-label>One</ion-label>
+        <ion-radio value="1"></ion-radio>
+      </ion-item>
+      <ion-item>
+        <ion-label>Two</ion-label>
+        <ion-radio value="2"></ion-radio>
+      </ion-item>
+    </ion-list>
+  </ion-card>
+  <ion-card>
+    <ion-card-header>
+      THALI MODE
+    </ion-card-header>
+  <ion-list radio-group [(ngModel)]="mode" (ionChange)="setMode()">
+
+    <ion-item>
+      <ion-label>Wifi</ion-label>
+      <ion-radio value="wifi"></ion-radio>
+    </ion-item>
+    <ion-item>
+      <ion-label>Native</ion-label>
+      <ion-radio value="native"></ion-radio>
+    </ion-item>
+    <ion-item>
+      <ion-label>Both</ion-label>
+      <ion-radio value="both"></ion-radio>
+    </ion-item>
+  </ion-list>
+</ion-card>
+<ion-card>
+  <ion-card-header>
+     THALI
+   </ion-card-header>
+   <ion-item no-lines>
+     <ion-label>Thali</ion-label>
+     <ion-toggle [(ngModel)]="thali" (ionChange)="setState()"></ion-toggle>
   </ion-item>
-  <ion-item>
-    <ion-label>Native</ion-label>
-    <ion-radio value="native"></ion-radio>
-  </ion-item>
-  <ion-item>
-    <ion-label>Both</ion-label>
-    <ion-radio value="both"></ion-radio>
-  </ion-item>
-</ion-list>
-<ion-list-header>
-  THALI
-</ion-list-header>
-<ion-item no-lines>
-  <ion-label>Thali</ion-label>
-  <ion-toggle [(ngModel)]="thali" (ionChange)="setState()"></ion-toggle>
- </ion-item>
+</ion-card>
+</ion-content>

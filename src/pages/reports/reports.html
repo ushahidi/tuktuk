@@ -4,8 +4,8 @@
       Reports
     </ion-title>
     <ion-buttons end>
-      <button ion-button icon-only (click)="displaySettings($event)">
-        <ion-icon name="more"></ion-icon>
+      <button ion-button icon-only [navPush]="settings">        
+        <ion-icon name="cog"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
