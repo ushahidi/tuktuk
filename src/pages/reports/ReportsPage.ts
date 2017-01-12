@@ -5,33 +5,30 @@ import { SettingsPage } from '../settings/SettingsPage';
 import { ReportProvider } from '../../providers/report-provider';
 
 @Component({
-    selector: 'page-reports',
-    templateUrl: 'reports.html'
+  selector: 'page-reports',
+  templateUrl: 'reports.html'
 })
 export class ReportsPage {
 
-    createReport = CreateReportPage;
-    reports = []
+  createReport = CreateReportPage;
+  reports: any;
 
-    constructor(
-        private navCtrl: NavController,
-        private store: ReportProvider,
-        public popoverCtrl: PopoverController
-    ) { }
+  constructor(
+    private navCtrl: NavController,
+    private reportService: ReportProvider,
+    public popoverCtrl: PopoverController
+  ) { }
 
-    ionViewDidLoad() {
-      console.info('LOADING DATA');
-        // this.store
-        // .fetch()
-        // .then(reportsData => {
-        //   console.info('REPORTS DATA',JSON.stringify(reportsData))
-        //     // this.reports = reportsData;
-        // });
-    }
+  ionViewDidLoad() {
+    console.info('LOADING DATA');
+    this.reportService.fetch().then((data) => {
+      this.reports = data;
+    });
+  }
 
-    displaySettings(event) {
-      let popover = this.popoverCtrl.create(SettingsPage);
-      popover.present({ ev: event });
-    }
+  displaySettings(event) {
+    let popover = this.popoverCtrl.create(SettingsPage);
+    popover.present({ ev: event });
+  }
 
 }

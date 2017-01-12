@@ -10,8 +10,12 @@
     </ion-buttons>
   </ion-navbar>
 </ion-header>
-<ion-content padding>
-
+<ion-content>
+  <ion-card *ngFor="let report of reports">
+    <ion-card-content>
+      {{report.description}}
+    </ion-card-content>
+  </ion-card>
   <ion-fab center bottom>
     <button ion-fab color="primary" [navPush]="createReport" ><ion-icon name="add"></ion-icon></button>
   </ion-fab>

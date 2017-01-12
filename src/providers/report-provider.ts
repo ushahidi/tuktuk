@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
-import uuid from 'uuid/v4';
 import PouchDB from 'pouchdb';
 
 @Injectable()
