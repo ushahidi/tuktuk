@@ -19,10 +19,10 @@ export class ReportsPage {
     private reportProvider: ReportProvider,
   ) {}
 
-  ionViewDidLoad() {
-    this.reportProvider.fetch().then((data) => {
-      console.info('LOADING REPORT DATA', data);
-      this.reports = data;
+  ionViewDidEnter() {
+    this.reportProvider.fetch().then((reports) => {
+      console.info('FETCH REPORTS', reports);
+      this.reports = reports;
     });
   }
 }

@@ -116,6 +116,7 @@ export class ThaliProvider {
     return new Promise((resolve, reject) =>{
       (<any>window).jxcore('app.js').loadMainFile((ret, err) => {
         console.info('JXCORE IS LOADED')
+        console.info('RET', ret)
         this.isJXcoreLoaded = true
         this.settings.set('isJXcoreLoaded', this.isJXcoreLoaded)
         if(err){

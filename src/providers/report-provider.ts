@@ -7,7 +7,7 @@ import { AlertController, LoadingController } from 'ionic-angular';
 @Injectable()
 export class ReportProvider {
 
-  private data: any;
+  private reports: any;
   private store: any;
   private remote: any;
 
@@ -19,7 +19,7 @@ export class ReportProvider {
 
   public init() {
     return new Promise((resolve, reject) => {
-      this.store = new PouchDB('http://127.0.0.1:8424/database/tuktuk')
+      this.store = new PouchDB('http://127.0.0.1:8424/data/user/0/com.ushahidi.tuktuk/files/database/tuktuk')
       console.info('DB SETUP')
       return resolve(this)
     })
@@ -41,8 +41,8 @@ export class ReportProvider {
   }
 
   public fetch() {
-    if (this.data) {
-      return Promise.resolve(this.data);
+    if (this.reports) {
+      return Promise.resolve(this.reports);
     }
 
     return new Promise(resolve => {
@@ -50,13 +50,13 @@ export class ReportProvider {
         include_docs: true
       }).then((result) => {
 
-        this.data = [];
+        this.reports = [];
 
         result.rows.map((row) => {
-          this.data.push(row.doc);
+          this.reports.push(row.doc);
         });
 
-        resolve(this.data);
+        resolve(this.reports);
 
         this.store.changes({ live: true, since: 'now', include_docs: true }).on('change', (change) => {
           this.handleChange(change);
@@ -89,7 +89,7 @@ export class ReportProvider {
     let changedDoc = null;
     let changedIndex = null;
 
-    this.data.forEach((doc, index) => {
+    this.reports.forEach((doc, index) => {
       if (doc._id === change.id) {
         changedDoc = doc;
         changedIndex = index;
@@ -99,15 +99,15 @@ export class ReportProvider {
 
     if (change.deleted) {
       // A document was deleted
-      this.data.splice(changedIndex, 1);
+      this.reports.splice(changedIndex, 1);
     } else {
 
       if (changedDoc) {
         // A document was updated
-        this.data[changedIndex] = change.doc;
+        this.reports[changedIndex] = change.doc;
       } else {
         // A document was added
-        this.data.push(change.doc);
+        this.reports.push(change.doc);
       }
 
     }
