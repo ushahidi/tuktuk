@@ -7,12 +7,12 @@ import { AlertController, LoadingController } from 'ionic-angular';
 export class ThaliProvider {
 
   private teamAlert: any;
-  private loader: any;
-  public deviceId: any;
-  public mode: string;
-  public isThaliPeerRunning = false;
-  public isThaliInitialized = false;
-  public isJXcoreLoaded = false;
+  public loader: any;
+  private deviceId: any;
+  private mode: string;
+  private isThaliPeerRunning = false;
+  private isThaliInitialized = false;
+  private isJXcoreLoaded = false;
 
 
   constructor(
@@ -77,58 +77,69 @@ export class ThaliProvider {
   public loadComponents() {
     this.loader = this.loadingCtrl.create({
       content: "Loading Components. Please wait...",
-    }).present()
+    })
+
+    this.loader.present()
     console.info('LOADING JXCORE');
 
-    this.loadJXCore()
-    .then(() => this.initThali())
-    .then()
-
-
+    return new Promise((resolve, reject) => {
+      this
+      .getPermissions()
+      .then(() => this.loadJXcore())
+      .then(() => this.initThali())
+      .then(()=>{
+        return resolve(this)
+      })
+    })
   }
 
-  private loadJXCore() {
+  private getPermissions() {
     return new Promise((resolve, reject) => {
-      // (<any>window).jxcore.isReady(() => {
-      this.isJXcoreLoaded = true
-      this.settings.set('isJXcoreLoaded', this.isJXcoreLoaded)
-      //   console.info('JXCORE IS READY');
-      //   if ((<any>window).window.ThaliPermissions) {
-      //     (<any>window).window.ThaliPermissions.requestLocationPermission(() => {
-      // return resolve(this);
-      //   }, (error) => {
-      //     // console.error(`Location permission not granted. Error: ${error}`)
-      //     return reject(error);
-      //   })
-      // } else {
+      (<any>window).jxcore.isReady(() => {
+
+        console.info('JXCORE IS READY');
+        if ((<any>window).window.ThaliPermissions) {
+          (<any>window).window.ThaliPermissions.requestLocationPermission(() => {
+      return resolve(this);
+        }, (error) => {
+          // console.error(`Location permission not granted. Error: ${error}`)
+          return reject(error);
+        })
+      } else {
         return resolve()
-      // }
-      // })
+        }
+      })
+    })
+  }
+
+  private loadJXcore() {
+    return new Promise((resolve, reject) =>{
+      (<any>window).jxcore('app.js').loadMainFile((ret, err) => {
+        console.info('JXCORE IS LOADED')
+        this.isJXcoreLoaded = true
+        this.settings.set('isJXcoreLoaded', this.isJXcoreLoaded)
+        if(err){
+          return reject(err);
+        }
+        return resolve()
+      })
     })
   }
 
   private initThali() {
-
-  }
-
-  public load() {
-    // (<any>window).jxcore('app.js').loadMainFile((ret, err) => {
-    //   console.log('JXCORE IS LOADED')
-    //   this.storage.set('jxcoreLoaded', true)
-    //   this.loader.dismiss()
-    //   Promise
-    //     .all([this.storage.get('deviceId'), this.storage.get('mode')])
-    //     .then((settings)=>{
-    //       console.log(settings)
-    //       // if(settings['deviceId']){
-    //       //   this.init(settings['deviceId'], settings['mode'])
-    //       // }
-    //     })
-    // })
+    return new Promise((resolve, reject) => {
+      (<any>window).jxcore('initThali').call(this.deviceId, this.mode,  () => {
+        console.info(`THALI INITIALIZED FOR DEVICE ID ${this.deviceId}`)
+        this.isThaliInitialized = true
+        this.settings.set('isThaliInitialized', this.isThaliInitialized)
+        return resolve()
+    });
+    })
   }
 
 
-  public switch(state: boolean) {
+
+  public switch() {
     // if (state === true) {
     //   (<any>window).jxcore('startThali').call(() =>{
     //     console.log('THALI STARTED');

@@ -3,7 +3,6 @@ import { NavController } from 'ionic-angular';
 import { CreateReportPage } from './CreateReportPage';
 import { SettingsPage } from '../settings';
 import { ReportProvider } from '../../providers';
-import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'page-reports',
@@ -17,16 +16,13 @@ export class ReportsPage {
 
   constructor(
     private navCtrl: NavController,
-    private reportService: ReportProvider,
-    private storage: Storage
+    private reportProvider: ReportProvider,
   ) {}
 
   ionViewDidLoad() {
-    // this.reportService.fetch().then((data) => {
-    //   console.info('LOADING REPORT DATA', data);
-    //   this.reports = data;
-    // });
+    this.reportProvider.fetch().then((data) => {
+      console.info('LOADING REPORT DATA', data);
+      this.reports = data;
+    });
   }
-
-
 }

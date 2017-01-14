@@ -6,25 +6,22 @@
 <ion-content>
   <ion-card>
     <ion-card-header>
-      DEVICE
+      TEAM
     </ion-card-header>
-    <ion-item *ngIf="deviceId == null" >
-      <p> Please select a device </p>
-    </ion-item>
     <ion-list radio-group [(ngModel)]="deviceId" (ionChange)="setDeviceId()">
       <ion-item>
-        <ion-label>One</ion-label>
+        <ion-label>Team One</ion-label>
         <ion-radio value="1"></ion-radio>
       </ion-item>
       <ion-item>
-        <ion-label>Two</ion-label>
+        <ion-label>Team Two</ion-label>
         <ion-radio value="2"></ion-radio>
       </ion-item>
     </ion-list>
   </ion-card>
   <ion-card>
     <ion-card-header>
-      THALI MODE
+      MODE
     </ion-card-header>
   <ion-list radio-group [(ngModel)]="mode" (ionChange)="setMode()">
 
@@ -47,8 +44,8 @@
      THALI
    </ion-card-header>
    <ion-item no-lines>
-     <ion-label>Thali</ion-label>
-     <ion-toggle [(ngModel)]="thaliRunning" (ionChange)="setState()"></ion-toggle>
+     <ion-label>Peer Sync</ion-label>
+     <ion-toggle [(ngModel)]="isThaliPeerRunning" (ionChange)="setPeerState()"></ion-toggle>
   </ion-item>
 </ion-card>
 </ion-content>
