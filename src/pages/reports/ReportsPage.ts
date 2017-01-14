@@ -19,23 +19,14 @@ export class ReportsPage {
     private navCtrl: NavController,
     private reportService: ReportProvider,
     private storage: Storage
-  ) { }
+  ) {}
 
   ionViewDidLoad() {
-    this.storage
-      .get('deviceId')
-      .then((deviceId) => {
-        if(deviceId === null){
-          this.navCtrl.push(this.settings);
-        }        
-      })
+    // this.reportService.fetch().then((data) => {
+    //   console.info('LOADING REPORT DATA', data);
+    //   this.reports = data;
+    // });
   }
 
-  ionViewWillEnter() {
-    console.info('LOADING DATA');
-    this.reportService.fetch().then((data) => {
-      this.reports = data;
-    });
-  }
 
 }

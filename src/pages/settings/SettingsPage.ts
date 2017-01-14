@@ -1,13 +1,8 @@
 import { Component } from '@angular/core';
 import { NavController, AlertController, LoadingController, NavParams } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
+// import { Thali } from '../../providers';
 
-/*
-  Generated class for the Settings page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
 @Component({
   selector: 'page-settings',
   templateUrl: 'settings.html'
@@ -15,31 +10,20 @@ import { Storage } from '@ionic/storage';
 export class SettingsPage {
   deviceId: any;
   mode: string;
-  thali: boolean;
+  thaliRunning: boolean;
   jxcoreLoaded: boolean;
+  thaliInitialized: boolean;
 
   constructor(
     public navCtrl: NavController,
     public alertCtrl: AlertController,
     public loadingCtrl: LoadingController,
     public navParams: NavParams,
-    private storage: Storage
-  ) {
-    this.storage.set('jxcoreLoaded', false)
-    this.storage.set('mode', 'both')
-    this.storage.set('thali', false)
-  }
+    private storage: Storage,
+    // public thaliService: Thali
+  ) { }
 
   ionViewDidLoad() {
-    this.storage
-      .get('jxcoreLoaded')
-      .then((jxcoreLoaded) => {
-        this.jxcoreLoaded = jxcoreLoaded;
-        if (!jxcoreLoaded) {
-          this.showLoading()
-        }
-      })
-
     this.storage
       .get('deviceId')
       .then((deviceId) => {
@@ -49,13 +33,13 @@ export class SettingsPage {
     this.storage
       .get('mode')
       .then((mode) => {
-        this.mode = mode;
+        this.mode = (mode)? mode :'both';
       })
 
     this.storage
-      .get('thali')
-      .then((thali) => {
-        this.thali = thali;
+      .get('thaliRunning')
+      .then((thaliRunning) => {
+        this.thaliRunning = (thaliRunning)?true:false;
       })
 
   }
@@ -72,24 +56,22 @@ export class SettingsPage {
 
   showAlert() {
     let alert = this.alertCtrl.create({
-      title: 'Pick Device Id!',
-      subTitle: 'In order for Thali to work you need to pick your device Id!',
+      title: 'Select Device!',
+      subTitle: 'In order for Thali to work you need to select a device!',
       buttons: ['OK']
     });
     alert.present();
   }
 
-  showLoading() {
-    let loader = this.loadingCtrl.create({
-      content: "Loading Thali. Please wait...",
-      duration: 3000
-    });
-    loader.present();
-  }
-
   setDeviceId() {
+    this.storage.set('deviceId', parseInt(this.deviceId))
     this.storage
-      .set('deviceId', parseInt(this.deviceId))
+      .get('jxcoreLoaded')
+      .then((jxcoreLoaded) => {
+        if (jxcoreLoaded && this.deviceId !== null ) {
+          // this.thaliService.init(this.deviceId, this.mode)
+        }
+      })
   }
 
   setMode() {
@@ -97,7 +79,17 @@ export class SettingsPage {
   }
 
   setState() {
-    this.storage.set('thali', this.thali)
+    this.storage.set('thaliRunning', this.thaliRunning)
+    if(this.thaliRunning) {
+      (<any>window).jxcore('startThali').call(() =>{
+        console.log('THALI STARTED');
+      })
+    }
+    if(!this.thaliRunning) {
+      (<any>window).jxcore('stopThali').call(() =>{
+        console.log('THALI STOPED');
+      })
+    }
   }
 
 

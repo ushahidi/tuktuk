@@ -9,7 +9,7 @@
       DEVICE
     </ion-card-header>
     <ion-item *ngIf="deviceId == null" >
-      <p> Please select a thali device </p>
+      <p> Please select a device </p>
     </ion-item>
     <ion-list radio-group [(ngModel)]="deviceId" (ionChange)="setDeviceId()">
       <ion-item>
@@ -48,7 +48,7 @@
    </ion-card-header>
    <ion-item no-lines>
      <ion-label>Thali</ion-label>
-     <ion-toggle [(ngModel)]="thali" (ionChange)="setState()"></ion-toggle>
+     <ion-toggle [(ngModel)]="thaliRunning" (ionChange)="setState()"></ion-toggle>
   </ion-item>
 </ion-card>
 </ion-content>

@@ -3,11 +3,11 @@ import { IonicApp, IonicModule } from 'ionic-angular';
 import { Tuktuk } from './app.component';
 import { ReportsPage, CreateReportPage } from '../pages/reports';
 import { SettingsPage } from '../pages/settings';
-import { ReportProvider } from '../providers';
+import { ReportProvider, ThaliProvider } from '../providers';
 import { Storage } from '@ionic/storage';
 
 export function provideStorage() {
-  return new Storage(['websql', 'indexeddb'],{ name: '_settings_tuktuk', storeName: '_thali' });
+  return new Storage(['websql', 'indexeddb'], { name: '_settings_tuktuk', storeName: '_thali' });
 }
 
 @NgModule({
@@ -17,7 +17,7 @@ export function provideStorage() {
     CreateReportPage,
     SettingsPage
   ],
-  imports: [ IonicModule.forRoot(Tuktuk,{
+  imports: [IonicModule.forRoot(Tuktuk, {
     backButtonText: '',
     backButtonIcon: 'close'
   })],
@@ -28,7 +28,7 @@ export function provideStorage() {
     CreateReportPage,
     SettingsPage
   ],
-  providers: [ { provide: Storage, useFactory: provideStorage }, ReportProvider ]
+  providers: [{ provide: Storage, useFactory: provideStorage }, ReportProvider, ThaliProvider]
 })
 
-export class AppModule {}
+export class AppModule { }
