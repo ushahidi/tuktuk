@@ -14,11 +14,11 @@
   <form id="reportForm" [formGroup]="reportForm" (ngSubmit)="save()">
      <ion-item>
        <ion-label floating>Describe the problem</ion-label>
-       <ion-textarea autosize formControlName="description"></ion-textarea>
+       <ion-textarea fz-elastic formControlName="description"></ion-textarea>
      </ion-item>
      <ion-item>
        <ion-label floating><ion-icon name="locate"></ion-icon> Where is the problem</ion-label>
-       <ion-textarea autosize formControlName="address"></ion-textarea>
+       <ion-textarea fz-elastic formControlName="address"></ion-textarea>
      </ion-item>
      <ion-item>
        <ion-label floating><ion-icon name="time"></ion-icon> What time did you last see the problem?</ion-label>
@@ -28,11 +28,11 @@
        <ion-label floating><ion-icon name="calendar"></ion-icon> What date did you last see the problem?</ion-label>
        <ion-datetime displayFormat="MMM DD, YYYY" formControlName="date"></ion-datetime>
      </ion-item>
-     <!-- <ion-item> -->
-       <!-- <ion-label floating><ion-icon name="camera"></ion-icon> Photo of the problem?</ion-label> -->
-       <button ion-button (click)="takePicture()" clear icon-left ><ion-icon name="camera"></ion-icon> Photo of the problem </button>
-       <img [src]="photo" *ngIf="photo" />
-     <!-- </ion-item> -->
-
-   </form>
+  </form>
+ <ion-item>
+   <button ion-button (click)="takePicture()" clear icon-left ><ion-icon name="camera"></ion-icon> Photo of the problem </button>
+ </ion-item>
+ <ion-item>
+   <img [src]="photo" *ngIf="photo" />
+ </ion-item>
 </ion-content>

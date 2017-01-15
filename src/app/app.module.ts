@@ -5,6 +5,7 @@ import { ReportsPage, CreateReportPage } from '../pages/reports';
 import { SettingsPage } from '../pages/settings';
 import { ReportProvider, ThaliProvider } from '../providers';
 import { Storage } from '@ionic/storage';
+import { ElasticModule } from 'angular2-elastic';
 
 export function provideStorage() {
   return new Storage(['websql', 'indexeddb'], { name: '_settings_tuktuk', storeName: '_thali' });
@@ -20,7 +21,7 @@ export function provideStorage() {
   imports: [IonicModule.forRoot(Tuktuk, {
     backButtonText: '',
     backButtonIcon: 'close'
-  })],
+  }),ElasticModule],
   bootstrap: [IonicApp],
   entryComponents: [
     Tuktuk,

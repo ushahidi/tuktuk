@@ -21,12 +21,12 @@ export class CreateReportPage {
     public reportProvider: ReportProvider,
     public thaliProvider: ThaliProvider
   ) {
-    let today = new Date()
+    let now = new Date().toISOString()    
     this.reportForm = this.formBuilder.group({
       description: [],
       address: [],
-      time: today.toISOString(),
-      date: today.toISOString()
+      time: now,
+      date: now
     })
   }
 
@@ -47,10 +47,13 @@ export class CreateReportPage {
 
   takePicture() {
     Camera.getPicture({
-      destinationType: Camera.DestinationType.DATA_URL
+      destinationType: Camera.DestinationType.DATA_URL,
+      targetWidth: 360,
+      targetHeight: 360
     })
     .then((imageData) => {
-      // this.photo = `data:image/jpeg;base64,${imageData}`;
+      console.dir(imageData)
+      this.photo = `data:image/jpeg;base64,${imageData}`;
       console.log('PHOTO', this.photo);
     })
     .catch((error)=>{
