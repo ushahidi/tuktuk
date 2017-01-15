@@ -41,4 +41,5 @@
     <plugin name="ionic-plugin-keyboard" spec="~2.2.1" />
     <plugin name="cordova-plugin-splashscreen" spec="~4.0.1" />
     <allow-navigation href="http://10.0.0.3:8100" />
+    <plugin name="cordova-plugin-background-mode" spec="~0.6.5" />
 </widget>

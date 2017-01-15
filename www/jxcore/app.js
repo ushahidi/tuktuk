@@ -14,6 +14,7 @@ var ThaliReplicationManager = require('thali/NextGeneration/thaliManager');
 var ThaliMobile = require('thali/NextGeneration/thaliMobile');
 var LeveldownMobile = require('leveldown-mobile');
 var localStore;
+var manager;
 var keysToUse;
 
 // var ThaliStore = new pouchDB('tuktuk')
@@ -75,7 +76,7 @@ Mobile('initThali').registerSync(function (deviceId, mode) {
                 defaultAdapter: LeveldownMobile
             });
 
-            var manager = new ThaliReplicationManager(
+            manager = new ThaliReplicationManager(
                 ExpressPouchDB,
                 PouchDB,
                 'tuktuk',
@@ -94,4 +95,14 @@ Mobile('initThali').registerSync(function (deviceId, mode) {
 
         }
     });
+});
+
+Mobile('startThali').registerSync(function () {
+    console.log('TestApp start thali');
+    manager.start(keysToUse);
+});
+
+Mobile('stopThali').registerSync(function () {
+    console.log('TestApp stop thali');
+    manager.stop();
 });

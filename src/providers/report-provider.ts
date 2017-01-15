@@ -19,7 +19,11 @@ export class ReportProvider {
 
   public init() {
     return new Promise((resolve, reject) => {
-      this.store = new PouchDB('http://127.0.0.1:8424/data/user/0/com.ushahidi.tuktuk/files/database/tuktuk')
+      if (typeof (<any>window).jxcore == 'function') {
+        this.store = new PouchDB('http://127.0.0.1:8424/data/user/0/com.ushahidi.tuktuk/files/database/tuktuk')
+      } else {
+        this.store = new PouchDB('http://127.0.0.1:8424/database/tuktuk')
+      }
       console.info('DB SETUP')
       return resolve(this)
     })

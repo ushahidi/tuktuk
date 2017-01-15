@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { CreateReportPage } from './CreateReportPage';
+import { CreateReportPage } from './create-report-page';
 import { SettingsPage } from '../settings';
-import { ReportProvider } from '../../providers';
+import { ReportProvider, ThaliProvider } from '../../providers';
 
 @Component({
   selector: 'page-reports',
@@ -17,10 +17,12 @@ export class ReportsPage {
   constructor(
     private navCtrl: NavController,
     private reportProvider: ReportProvider,
+    private thaliProvider: ThaliProvider,
   ) {}
 
   ionViewDidEnter() {
     this.reportProvider.fetch().then((reports) => {
+      this.thaliProvider.loader.dismiss()
       console.info('FETCH REPORTS', reports);
       this.reports = reports;
     });

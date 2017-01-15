@@ -8,11 +8,11 @@ export class ThaliProvider {
 
   private teamAlert: any;
   public loader: any;
-  private deviceId: any;
-  private mode: string;
-  private isThaliPeerRunning = false;
-  private isThaliInitialized = false;
-  private isJXcoreLoaded = false;
+  public deviceId: any;
+  public mode: string;
+  public isThaliPeerRunning = false;
+  public isThaliInitialized = false;
+  public isJXcoreLoaded = false;
 
 
   constructor(
@@ -33,11 +33,8 @@ export class ThaliProvider {
       ])
       .then((settings) => {
         this.deviceId = settings[0];
-
-        if (!settings[1]) {
-          this.mode = settings[1] || 'wifi';
-          this.settings.set('mode', this.mode)
-        }
+        this.mode = settings[1] || 'both';
+        this.settings.set('mode', this.mode)
         return this;
       })
   }
@@ -84,72 +81,99 @@ export class ThaliProvider {
 
     return new Promise((resolve, reject) => {
       this
-      .getPermissions()
-      .then(() => this.loadJXcore())
-      .then(() => this.initThali())
-      .then(()=>{
-        return resolve(this)
-      })
+        .getPermissions()
+        .then(() => this.loadJXcore())
+        .then(() => this.initThali())
+        .then(() => {
+          return resolve(this)
+        })
     })
   }
 
   private getPermissions() {
     return new Promise((resolve, reject) => {
-      (<any>window).jxcore.isReady(() => {
-
-        console.info('JXCORE IS READY');
-        if ((<any>window).window.ThaliPermissions) {
-          (<any>window).window.ThaliPermissions.requestLocationPermission(() => {
-      return resolve(this);
-        }, (error) => {
-          // console.error(`Location permission not granted. Error: ${error}`)
-          return reject(error);
+      if (typeof (<any>window).jxcore == 'function') {
+        (<any>window).jxcore.isReady(() => {
+          console.info('JXCORE IS READY');
+          if ((<any>window).window.ThaliPermissions) {
+            (<any>window).window.ThaliPermissions.requestLocationPermission(() => {
+              return resolve(this);
+            }, (error) => {
+              // console.error(`Location permission not granted. Error: ${error}`)
+              return reject(error);
+            })
+          } else {
+            return resolve()
+          }
         })
       } else {
         return resolve()
-        }
-      })
+      }
     })
   }
 
   private loadJXcore() {
-    return new Promise((resolve, reject) =>{
-      (<any>window).jxcore('app.js').loadMainFile((ret, err) => {
-        console.info('JXCORE IS LOADED')
-        console.info('RET', ret)
+    return new Promise((resolve, reject) => {
+      if (this.isJXcoreLoaded) {
+        return resolve()
+      }
+
+      if (typeof (<any>window).jxcore == 'function') {
+        (<any>window).jxcore('app.js').loadMainFile((ret, err) => {
+          console.info('JXCORE IS LOADED')
+              
+          this.isJXcoreLoaded = true
+          this.settings.set('isJXcoreLoaded', this.isJXcoreLoaded)
+          if (err) {
+            return reject(err);
+          }
+          return resolve()
+        })
+      } else {
         this.isJXcoreLoaded = true
         this.settings.set('isJXcoreLoaded', this.isJXcoreLoaded)
-        if(err){
-          return reject(err);
-        }
         return resolve()
-      })
+      }
+
     })
   }
 
   private initThali() {
     return new Promise((resolve, reject) => {
-      (<any>window).jxcore('initThali').call(this.deviceId, this.mode,  () => {
-        console.info(`THALI INITIALIZED FOR DEVICE ID ${this.deviceId}`)
+      if (typeof (<any>window).jxcore == 'function') {
+        (<any>window).jxcore('initThali').call(this.deviceId, this.mode, () => {
+          console.info(`THALI INITIALIZED FOR DEVICE ID ${this.deviceId}`)
+          this.isThaliInitialized = true
+          this.settings.set('isThaliInitialized', this.isThaliInitialized)
+          return resolve()
+        });
+      } else {
         this.isThaliInitialized = true
         this.settings.set('isThaliInitialized', this.isThaliInitialized)
         return resolve()
-    });
+      }
     })
   }
 
-
-
-  public switch() {
-    // if (state === true) {
-    //   (<any>window).jxcore('startThali').call(() =>{
-    //     console.log('THALI STARTED');
-    //   });
-    // } else {
-    //   (<any>window).jxcore('stopThali').call(() =>{
-    //     console.log('THALI STOPED');
-    //   });
-    // }
+  public switchPeer() {
+    return new Promise((resolve, reject) => {
+      this.settings.get('isThaliPeerRunning')
+        .then((isThaliPeerRunning) => {
+          console.log('IS PEER RUNNING?',isThaliPeerRunning)
+          return resolve()
+          // if (isThaliPeerRunning) {
+          //   (<any>window).jxcore('startThali').call(() => {
+          //     console.log('THALI STARTED');
+          //     return resolve()
+          //   });
+          // } else {
+          //   (<any>window).jxcore('stopThali').call(() => {
+          //     console.log('THALI STOPPED');
+          //     return resolve()
+          //   });
+          // }
+        })
+    })
 
   }
 

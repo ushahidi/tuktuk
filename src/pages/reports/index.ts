@@ -1,2 +1,2 @@
-export { ReportsPage } from './ReportsPage';
-export { CreateReportPage } from './CreateReportPage';
+export { ReportsPage } from './reports-page';
+export { CreateReportPage } from './create-report-page';
