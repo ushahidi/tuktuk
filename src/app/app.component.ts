@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Platform, LoadingController } from 'ionic-angular';
-import { StatusBar, Splashscreen, BackgroundMode } from 'ionic-native';
+// import { StatusBar, Splashscreen, BackgroundMode } from 'ionic-native';
 import { ReportsPage } from '../pages/reports';
 import { ReportProvider, ThaliProvider } from '../providers'
 
@@ -17,9 +17,9 @@ export class Tuktuk {
     private loading: LoadingController
   ) {
     platform.ready().then(() => {
-      StatusBar.styleDefault();
-      Splashscreen.hide();
-      BackgroundMode.enable();
+      // StatusBar.styleDefault();
+      // Splashscreen.hide();
+      // BackgroundMode.enable();
       this.thaliProvider
         .init()
         .then((thali) => thali.setTeam())

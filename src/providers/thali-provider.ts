@@ -121,7 +121,7 @@ export class ThaliProvider {
       if (typeof (<any>window).jxcore == 'function') {
         (<any>window).jxcore('app.js').loadMainFile((ret, err) => {
           console.info('JXCORE IS LOADED')
-              
+
           this.isJXcoreLoaded = true
           this.settings.set('isJXcoreLoaded', this.isJXcoreLoaded)
           if (err) {
@@ -160,18 +160,18 @@ export class ThaliProvider {
       this.settings.get('isThaliPeerRunning')
         .then((isThaliPeerRunning) => {
           console.log('IS PEER RUNNING?',isThaliPeerRunning)
-          return resolve()
-          // if (isThaliPeerRunning) {
-          //   (<any>window).jxcore('startThali').call(() => {
-          //     console.log('THALI STARTED');
-          //     return resolve()
-          //   });
-          // } else {
-          //   (<any>window).jxcore('stopThali').call(() => {
-          //     console.log('THALI STOPPED');
-          //     return resolve()
-          //   });
-          // }
+          
+          if (isThaliPeerRunning) {
+            (<any>window).jxcore('startThali').call(() => {
+              console.log('THALI STARTED');
+              return resolve()
+            });
+          } else {
+            (<any>window).jxcore('stopThali').call(() => {
+              console.log('THALI STOPPED');
+              return resolve()
+            });
+          }
         })
     })
 

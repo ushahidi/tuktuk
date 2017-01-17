@@ -4,7 +4,7 @@
       Reports
     </ion-title>
     <ion-buttons end>
-      <button ion-button icon-only [navPush]="settings">        
+      <button ion-button icon-only [navPush]="settings">
         <ion-icon name="cog"></ion-icon>
       </button>
     </ion-buttons>
@@ -15,8 +15,17 @@
     <ion-card-content>
       {{report.description}}
     </ion-card-content>
+    <img [src]="report.photo" *ngIf="report.photo"/>
+    <ion-item text-wrap>
+      <ion-icon name="pin" item-left large ></ion-icon>
+      <p>{{report.address}}</p>
+    </ion-item>
+    <ion-item >
+      <ion-icon name="calendar" item-left large ></ion-icon>
+      <p>{{report.dateTime| date:'MMM dd, yyyy'}} {{report.dateTime| date:'h:mm a'}}</p>
+    </ion-item>
   </ion-card>
-  <ion-fab center bottom>
-    <button ion-fab color="primary" [navPush]="createReport" ><ion-icon name="add"></ion-icon></button>
+  <ion-fab right bottom>
+    <button ion-fab color="secondary" [navPush]="createReport" ><ion-icon name="add"></ion-icon></button>
   </ion-fab>
 </ion-content>

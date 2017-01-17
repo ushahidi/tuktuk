@@ -13,6 +13,7 @@ import { Camera } from 'ionic-native';
 export class CreateReportPage {
   reportForm: FormGroup
   photo: any;
+  imageData: any;
   report: any;
 
   constructor(
@@ -21,28 +22,37 @@ export class CreateReportPage {
     public reportProvider: ReportProvider,
     public thaliProvider: ThaliProvider
   ) {
-    let now = new Date().toISOString()    
+
     this.reportForm = this.formBuilder.group({
       description: [],
       address: [],
-      time: now,
-      date: now
+      time: [],
+      date: []
     })
   }
 
-  save() {
+  save() {    
     this.report = {
       deviceId: this.thaliProvider.deviceId,
-      photo:this.photo || '',
       description: this.reportForm.value.description,
       address: this.reportForm.value.address,
-      time: this.reportForm.value.time,
-      date: this.reportForm.value.date
+      dateTime: new Date(`${this.reportForm.value.date} ${this.reportForm.value.time}`).toISOString(),
+      timestamp: Date.now()
     }
-    console.log('REPORT', this.report)
 
-    // this.reportProvider.add(this.reportForm.value)
-    // this.navCtrl.pop()
+    if (this.imageData) {
+      this.report._attachments = {
+        'att.txt': {
+          content_type: "text/plain",
+          data: this.imageData
+        }
+      }
+    }
+
+    this
+      .reportProvider
+      .add(this.report)
+      .then(()=> this.navCtrl.pop())
   }
 
   takePicture() {
@@ -51,14 +61,13 @@ export class CreateReportPage {
       targetWidth: 360,
       targetHeight: 360
     })
-    .then((imageData) => {
-      console.dir(imageData)
-      this.photo = `data:image/jpeg;base64,${imageData}`;
-      console.log('PHOTO', this.photo);
-    })
-    .catch((error)=>{
-      console.error(error)
-    });
+      .then((imageData) => {
+        this.imageData = imageData;
+        this.photo = `data:image/jpeg;base64,${imageData}`;
+      })
+      .catch((error) => {
+        console.error(error)
+      });
   }
 
 }

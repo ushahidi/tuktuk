@@ -2,7 +2,6 @@
 var crypto = require('crypto');
 var fs = require('fs');
 var path = require('path');
-var Promise = require('bluebird');
 var app = require('express')();
 var ExpressPouchDB = require('express-pouchdb');
 var PouchDB = require('pouchdb');

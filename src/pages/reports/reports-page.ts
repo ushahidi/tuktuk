@@ -18,12 +18,15 @@ export class ReportsPage {
     private navCtrl: NavController,
     private reportProvider: ReportProvider,
     private thaliProvider: ThaliProvider,
-  ) {}
+  ) { }
 
   ionViewDidEnter() {
     this.reportProvider.fetch().then((reports) => {
       this.thaliProvider.loader.dismiss()
       console.info('FETCH REPORTS', reports);
+      reports.sort((a, b) => {
+        return b.timestamp - a.timestamp;
+      });
       this.reports = reports;
     });
   }

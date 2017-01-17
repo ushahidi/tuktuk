@@ -19,12 +19,9 @@ export class ReportProvider {
 
   public init() {
     return new Promise((resolve, reject) => {
-      if (typeof (<any>window).jxcore == 'function') {
-        this.store = new PouchDB('http://127.0.0.1:8424/data/user/0/com.ushahidi.tuktuk/files/database/tuktuk')
-      } else {
-        this.store = new PouchDB('http://127.0.0.1:8424/database/tuktuk')
-      }
-      console.info('DB SETUP')
+      const dbLoc = (typeof (<any>window).jxcore == 'function') ? '/data/user/0/com.ushahidi.tuktuk/files' : '/';
+      this.store = new PouchDB(`http://127.0.0.1:8424${dbLoc}/database/tuktuk`)
+      console.info('DB SETUP', this.store)
       return resolve(this)
     })
   }
@@ -50,41 +47,54 @@ export class ReportProvider {
     }
 
     return new Promise(resolve => {
-      this.store.allDocs({
-        include_docs: true
-      }).then((result) => {
+      this
+        .store
+        .allDocs({
+          include_docs: true,
+          attachments: true
+        })
+        .then((result) => {
+          this.reports = [];
+          result.rows.map((row) => {
+            if (row.doc._attachments) {
+              row.doc.photo = `data:image/jpeg;base64,${row.doc._attachments['att.txt'].data}`;
+            }
+            this.reports.push(row.doc);
+          });
 
-        this.reports = [];
+          this
+            .store
+            .changes({
+              live: true,
+              since: 'now',
+              include_docs: true,
+              attachments: true
+            })
+            .on('change', (change) => {
+              this.handleChange(change);
+            });
 
-        result.rows.map((row) => {
-          this.reports.push(row.doc);
+          resolve(this.reports);
+
+        }).catch((error) => {
+          console.error(error);
         });
-
-        resolve(this.reports);
-
-        this.store.changes({ live: true, since: 'now', include_docs: true }).on('change', (change) => {
-          this.handleChange(change);
-        });
-
-      }).catch((error) => {
-        console.error(error);
-      });
 
     });
   }
 
   public add(report) {
-    this.store.post(report);
+    return this.store.post(report);
   }
 
   public delete(report) {
-    this.store.remove(report).catch((err) => {
+    return this.store.remove(report).catch((err) => {
       console.error(err);
     });
   }
 
   public update(report) {
-    this.store.put(report).catch((err) => {
+    return this.store.put(report).catch((err) => {
       console.error(err);
     });
   }
