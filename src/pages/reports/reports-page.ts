@@ -21,8 +21,7 @@ export class ReportsPage {
   ) { }
 
   ionViewDidEnter() {
-    this.reportProvider.fetch().then((reports) => {
-      this.thaliProvider.loader.dismiss()
+    this.reportProvider.fetch().then((reports) => {      
       console.info('FETCH REPORTS', reports);
       reports.sort((a, b) => {
         return b.timestamp - a.timestamp;

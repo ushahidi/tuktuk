@@ -32,14 +32,14 @@ export class SettingsPage {
   save() {
     console.log('SETTINGS', this.settingsForm.value)
     this.settings.set('mode', this.settingsForm.value.mode)
-    this.thaliProvider.init()
-      .then((thali) => thali.loadComponents())
-      .then((thali) => this.reportProvider.init())
+    // this.thaliProvider.init()
+    //   .then((thali) => thali.loadComponents())
+    //   .then((thali) => this.reportProvider.init())
     this.navCtrl.pop()
   }
 
   setPeerState() {
     this.settings.set('isThaliPeerRunning', this.isThaliPeerRunning)
-    this.thaliProvider.switchPeer()
+    // this.thaliProvider.switchPeer()
   }
 }

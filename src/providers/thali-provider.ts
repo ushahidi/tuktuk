@@ -13,6 +13,7 @@ export class ThaliProvider {
   public isThaliPeerRunning = false;
   public isThaliInitialized = false;
   public isJXcoreLoaded = false;
+  public thaliStore: string;
 
 
   constructor(
@@ -23,6 +24,7 @@ export class ThaliProvider {
     this.settings.set('isJXcoreLoaded', this.isJXcoreLoaded)
     this.settings.set('isThaliInitialized', this.isThaliInitialized)
     this.settings.set('isThaliPeerRunning', this.isThaliPeerRunning)
+    this.settings.set('thaliStore', this.thaliStore)
   }
 
   public init() {
@@ -85,6 +87,7 @@ export class ThaliProvider {
         .then(() => this.loadJXcore())
         .then(() => this.initThali())
         .then(() => {
+          this.loader.dismiss()
           return resolve(this)
         })
     })
@@ -103,11 +106,11 @@ export class ThaliProvider {
               return reject(error);
             })
           } else {
-            return resolve()
+            return resolve(this)
           }
         })
       } else {
-        return resolve()
+        return resolve(this)
       }
     })
   }
@@ -121,60 +124,62 @@ export class ThaliProvider {
       if (typeof (<any>window).jxcore == 'function') {
         (<any>window).jxcore('app.js').loadMainFile((ret, err) => {
           console.info('JXCORE IS LOADED')
-
           this.isJXcoreLoaded = true
           this.settings.set('isJXcoreLoaded', this.isJXcoreLoaded)
           if (err) {
             return reject(err);
           }
-          return resolve()
+          return resolve(this)
         })
       } else {
         this.isJXcoreLoaded = true
         this.settings.set('isJXcoreLoaded', this.isJXcoreLoaded)
-        return resolve()
+        return resolve(this)
       }
 
     })
   }
 
+
   private initThali() {
     return new Promise((resolve, reject) => {
+
       if (typeof (<any>window).jxcore == 'function') {
         (<any>window).jxcore('initThali').call(this.deviceId, this.mode, () => {
           console.info(`THALI INITIALIZED FOR DEVICE ID ${this.deviceId}`)
+
           this.isThaliInitialized = true
           this.settings.set('isThaliInitialized', this.isThaliInitialized)
-          return resolve()
+          return resolve(this)
         });
       } else {
         this.isThaliInitialized = true
         this.settings.set('isThaliInitialized', this.isThaliInitialized)
-        return resolve()
+        return resolve(this)
       }
     })
   }
 
-  public switchPeer() {
-    return new Promise((resolve, reject) => {
-      this.settings.get('isThaliPeerRunning')
-        .then((isThaliPeerRunning) => {
-          console.log('IS PEER RUNNING?',isThaliPeerRunning)
-          
-          if (isThaliPeerRunning) {
-            (<any>window).jxcore('startThali').call(() => {
-              console.log('THALI STARTED');
-              return resolve()
-            });
-          } else {
-            (<any>window).jxcore('stopThali').call(() => {
-              console.log('THALI STOPPED');
-              return resolve()
-            });
-          }
-        })
-    })
-
-  }
+  // public switchPeer() {
+  //   return new Promise((resolve, reject) => {
+  //     this.settings.get('isThaliPeerRunning')
+  //       .then((isThaliPeerRunning) => {
+  //         console.log('IS PEER RUNNING?',isThaliPeerRunning)
+  //
+  //         if (isThaliPeerRunning) {
+  //           (<any>window).jxcore('startThali').call(() => {
+  //             console.log('THALI STARTED');
+  //             return resolve()
+  //           });
+  //         } else {
+  //           (<any>window).jxcore('stopThali').call(() => {
+  //             console.log('THALI STOPPED');
+  //             return resolve()
+  //           });
+  //         }
+  //       })
+  //   })
+  //
+  // }
 
 }

@@ -11,7 +11,7 @@ export JX_NPM_JXB
 
 mkdir -p thaliDontCheckIn/localdev
 cordova platform rm ios android
-cordova platform add ios android
+cordova platform add android
 
 cd www/jxcore
 jx npm install ../../../Thali_CordovaPlugin/thali/ --save --no-optional --autoremove "*.gz"

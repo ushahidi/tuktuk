@@ -16,8 +16,7 @@ var localStore;
 var manager;
 var keysToUse;
 
-// var ThaliStore = new pouchDB('tuktuk')
-console.log('THALI AND INIT LOADED ................')
+console.log('THALI LOADED ................')
 
 // Keys
 var ecdh1 = crypto.createECDH('secp256k1');
@@ -32,76 +31,65 @@ ecdh2.setPrivateKey('xRqiCIH1ka1omulZOzQxYJsX1IQOZRALu0+3miOuf2I=', 'base64');
 
 
 Mobile('initThali').registerSync(function (deviceId, mode) {
+  console.log('INIT THALI ...');
+  var ecdh;
+  var dbPrefix;
+  var thaliMode = ThaliMobile.networkTypes.BOTH;
 
-    var ecdh;
-    var dbPrefix;
-    var thaliMode = ThaliMobile.networkTypes.BOTH;
+  if (mode === 'native') {
+    thaliMode = ThaliMobile.networkTypes.NATIVE;
+  }
 
+  if (mode === 'wifi') {
+    thaliMode = ThaliMobile.networkTypes.WIFI;
+  }
 
-    if (mode === 'native') {
-        thaliMode = ThaliMobile.networkTypes.NATIVE;
-    }
+  if (deviceId === 1) {
+    console.log('thali Using device 1 keys');
+    ecdh = ecdh1;
+    keysToUse = [ecdh2.getPublicKey()];
+  } else {
+    console.log('thali Using device 2 keys');
+    ecdh = ecdh2;
+    keysToUse = [ecdh1.getPublicKey()];
+  }
 
-    if (mode === 'wifi') {
-        thaliMode = ThaliMobile.networkTypes.WIFI;
-    }
-
-    if (deviceId === 1) {
-        console.log('thali Using device 1 keys');
-        ecdh = ecdh1;
-        keysToUse = [ecdh2.getPublicKey()];
+  Mobile.getDocumentsPath(function(err, location) {
+    if (err) {
+      console.log('Tuktuk Error getting path');
+      return;
     } else {
-        console.log('thali Using device 2 keys');
-        ecdh = ecdh2;
-        keysToUse = [ecdh1.getPublicKey()];
+      dbPrefix = path.join(location, 'database');
+      console.log('DB PREFIX +++++++++++++++')
+      console.log(dbPrefix)
+      console.log('DB PREFIX ---------------')
+
+      if (!fs.existsSync(dbPrefix)) {
+        fs.mkdirSync(dbPrefix);
+      }
+
+      console.log('SETUP THALI DB GENERATOR');
+      PouchDB = PouchDBGenerator(PouchDB, dbPrefix + '/', {
+        defaultAdapter: LeveldownMobile
+      });
+
+      console.log('SETUP THALI MANAGER');
+      manager = new ThaliReplicationManager( ExpressPouchDB,PouchDB, 'tuktuk', ecdh, new ThaliPeerPoolOneAtATime(), thaliMode);
+      app.use(dbPrefix, ExpressPouchDB(PouchDB));
+      app.listen(8424,() => {
+        console.log('THALI SERVER STARTED AT PORT 8424')
+      });
+      localStore = new PouchDB('tuktuk');
     }
-
-    Mobile.getDocumentsPath(function(err, location) {
-        if (err) {
-            console.log('Tuktuk Error getting path');
-            return;
-        }
-        else {
-            dbPrefix = path.join(location, 'database');
-            console.info('DB PREFIX ---------------')
-            console.info(dbPrefix)
-
-            if (!fs.existsSync(dbPrefix)) {
-                fs.mkdirSync(dbPrefix);
-            }
-
-            console.log('Tuktuk initialize thali');
-            PouchDB = PouchDBGenerator(PouchDB, dbPrefix + '/', {
-                defaultAdapter: LeveldownMobile
-            });
-
-            manager = new ThaliReplicationManager(
-                ExpressPouchDB,
-                PouchDB,
-                'tuktuk',
-                ecdh,
-                //new ThaliPeerPoolDefault(),
-                new ThaliPeerPoolOneAtATime(),
-                thaliMode);
-
-          app.use(dbPrefix, ExpressPouchDB(PouchDB));
-          app.listen(8424,() => {
-            console.log('tuktuk server started on port 8424')
-          });
-
-          localStore = new PouchDB('tuktuk');
-          // return localStore;
-
-        }
-    });
+  });
 });
 
 Mobile('startThali').registerSync(function () {
-    console.log('TestApp start thali');
-    manager.start(keysToUse);
+  console.log('THALI PEER START');
+  manager.start(keysToUse);
 });
 
 Mobile('stopThali').registerSync(function () {
-    console.log('TestApp stop thali');
-    manager.stop();
+  console.log('THALI PEER STOP');
+  manager.stop();
 });

@@ -24,11 +24,11 @@ export class Tuktuk {
         .init()
         .then((thali) => thali.setTeam())
         .then((thali) => thali.loadComponents())
-        .then((thali) => this.reportProvider.init())
+        .then(() => this.reportProvider.init() )
         .then(() => {
           this.rootPage = ReportsPage
         })
-
+        .catch(console.log.bind(console));
     });
   }
 }

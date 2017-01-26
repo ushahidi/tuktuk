@@ -4,6 +4,7 @@ import PouchDB from 'pouchdb';
 import { Storage } from '@ionic/storage';
 import { AlertController, LoadingController } from 'ionic-angular';
 
+
 @Injectable()
 export class ReportProvider {
 
@@ -18,11 +19,24 @@ export class ReportProvider {
   ) { }
 
   public init() {
-    return new Promise((resolve, reject) => {
-      const dbLoc = (typeof (<any>window).jxcore == 'function') ? '/data/user/0/com.ushahidi.tuktuk/files' : '/';
-      this.store = new PouchDB(`http://127.0.0.1:8424${dbLoc}/database/tuktuk`)
-      console.info('DB SETUP', this.store)
-      return resolve(this)
+    return this.settings
+    .get('isThaliInitialized')
+    .then((isThaliInitialized) => {
+      return new Promise((resolve, reject) => {
+        if (typeof (<any>window).jxcore == 'function' || isThaliInitialized) {
+          // hard code this for android
+          this.store = new PouchDB('tuktuk')
+          // this.store = new PouchDB('http://127.0.0.1:8424/data/user/0/com.ushahidi.tuktuk/files/database/tuktuk')
+          this.store
+          .info()
+          .then(function(info) {
+            console.log('CONNECTED TO THALI STORE .. go fish')
+            console.log(info);
+            return resolve(this);
+          })
+          .catch(reject)
+        }
+      })
     })
   }
 
@@ -48,37 +62,37 @@ export class ReportProvider {
 
     return new Promise(resolve => {
       this
+      .store
+      .allDocs({
+        include_docs: true,
+        attachments: true
+      })
+      .then((result) => {
+        this.reports = [];
+        result.rows.map((row) => {
+          if (row.doc._attachments) {
+            row.doc.photo = `data:image/jpeg;base64,${row.doc._attachments['att.txt'].data}`;
+          }
+          this.reports.push(row.doc);
+        });
+
+        this
         .store
-        .allDocs({
+        .changes({
+          live: true,
+          since: 'now',
           include_docs: true,
           attachments: true
         })
-        .then((result) => {
-          this.reports = [];
-          result.rows.map((row) => {
-            if (row.doc._attachments) {
-              row.doc.photo = `data:image/jpeg;base64,${row.doc._attachments['att.txt'].data}`;
-            }
-            this.reports.push(row.doc);
-          });
-
-          this
-            .store
-            .changes({
-              live: true,
-              since: 'now',
-              include_docs: true,
-              attachments: true
-            })
-            .on('change', (change) => {
-              this.handleChange(change);
-            });
-
-          resolve(this.reports);
-
-        }).catch((error) => {
-          console.error(error);
+        .on('change', (change) => {
+          this.handleChange(change);
         });
+
+        resolve(this.reports);
+
+      }).catch((error) => {
+        console.error(error);
+      });
 
     });
   }
