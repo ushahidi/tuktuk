@@ -1,3 +1,6 @@
+# Specifies intentionally untracked files to ignore when using Git
+# http://git-scm.com/docs/gitignore
+
 *~
 *.sw[mnpcod]
 *.log
@@ -15,7 +18,15 @@ dist/
 node_modules/
 tmp/
 temp/
+hooks/
 platforms/
 plugins/
+$RECYCLE.BIN/
 .DS_Store
 Thumbs.db
+UserInterfaceState.xcuserstate
+thaliDontCheckIn
+www/jxcore/node_modules/
+www/jxcore/SSDP.js
+info.txt
+build.json
