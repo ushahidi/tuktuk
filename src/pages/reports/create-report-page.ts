@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, Events } from 'ionic-angular';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ReportProvider, ThaliProvider } from '../../providers';
 import { Camera } from 'ionic-native';
+import { ReportsPage } from './reports-page';
 
 
 @Component({
@@ -11,13 +12,15 @@ import { Camera } from 'ionic-native';
 })
 
 export class CreateReportPage {
+  reportsPage = ReportsPage;
   reportForm: FormGroup
   photo: any;
   imageData: any;
   report: any;
 
   constructor(
-    public navCtrl: NavController,
+    public nav: NavController,
+    public events: Events,
     public formBuilder: FormBuilder,
     public reportProvider: ReportProvider,
     public thaliProvider: ThaliProvider
@@ -31,7 +34,7 @@ export class CreateReportPage {
     })
   }
 
-  save() {    
+  save() {
     this.report = {
       deviceId: this.thaliProvider.deviceId,
       description: this.reportForm.value.description,
@@ -52,7 +55,7 @@ export class CreateReportPage {
     this
       .reportProvider
       .add(this.report)
-      .then(()=> this.navCtrl.pop())
+      .then(()=> this.nav.pop())
   }
 
   takePicture() {

@@ -23,13 +23,12 @@ export class ReportProvider {
     .get('isThaliInitialized')
     .then((isThaliInitialized) => {
       return new Promise((resolve, reject) => {
-        if (typeof (<any>window).jxcore == 'function' || isThaliInitialized) {
+        if (isThaliInitialized) {
           // hard code this for android
           this.store = new PouchDB('tuktuk')
-          // this.store = new PouchDB('http://127.0.0.1:8424/data/user/0/com.ushahidi.tuktuk/files/database/tuktuk')
-          this.store
-          .info()
-          .then(function(info) {
+          // this.store = new PouchDB('http://127.0.0.1:8424/tuktuk', { ajax: { cache:false, withCredentials: false}})
+          this.store.info()
+          .then((info) => {
             console.log('CONNECTED TO THALI STORE .. go fish')
             console.log(info);
             return resolve(this);
@@ -61,9 +60,7 @@ export class ReportProvider {
     }
 
     return new Promise(resolve => {
-      this
-      .store
-      .allDocs({
+      this.store.allDocs({
         include_docs: true,
         attachments: true
       })

@@ -23,8 +23,7 @@ export class Tuktuk {
       this.thaliProvider
         .init()
         .then((thali) => thali.setTeam())
-        .then((thali) => thali.loadComponents())
-        .then(() => this.reportProvider.init() )
+        .then((thali) => thali.loadComponents())        
         .then(() => {
           this.rootPage = ReportsPage
         })

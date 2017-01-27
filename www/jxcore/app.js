@@ -3,7 +3,8 @@ var crypto = require('crypto');
 var fs = require('fs');
 var path = require('path');
 var app = require('express')();
-var ExpressPouchDB = require('express-pouchdb');
+var cors = require('cors');
+var expressPouchDB = require('express-pouchdb');
 var PouchDB = require('pouchdb');
 //
 // // Thali
@@ -74,8 +75,10 @@ Mobile('initThali').registerSync(function (deviceId, mode) {
       });
 
       console.log('SETUP THALI MANAGER');
-      manager = new ThaliReplicationManager( ExpressPouchDB,PouchDB, 'tuktuk', ecdh, new ThaliPeerPoolOneAtATime(), thaliMode);
-      app.use(dbPrefix, ExpressPouchDB(PouchDB));
+      manager = new ThaliReplicationManager( expressPouchDB,PouchDB, 'tuktuk', ecdh, new ThaliPeerPoolOneAtATime(), thaliMode);
+
+      app.use(cors())
+      app.use('/', expressPouchDB(PouchDB));
       app.listen(8424,() => {
         console.log('THALI SERVER STARTED AT PORT 8424')
       });

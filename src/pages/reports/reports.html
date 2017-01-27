@@ -11,6 +11,12 @@
   </ion-navbar>
 </ion-header>
 <ion-content>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content
+        pullingText="Pull to refresh..."
+        refreshingText="Refreshing...">
+      </ion-refresher-content>
+    </ion-refresher>
   <ion-card *ngFor="let report of reports">
     <ion-card-content>
       {{report.description}}

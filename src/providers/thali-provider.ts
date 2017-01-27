@@ -144,7 +144,7 @@ export class ThaliProvider {
   private initThali() {
     return new Promise((resolve, reject) => {
 
-      if (typeof (<any>window).jxcore == 'function') {
+      if (typeof (<any>window).jxcore == 'function' &&  !this.isThaliInitialized) {
         (<any>window).jxcore('initThali').call(this.deviceId, this.mode, () => {
           console.info(`THALI INITIALIZED FOR DEVICE ID ${this.deviceId}`)
 
