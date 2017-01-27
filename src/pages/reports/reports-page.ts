@@ -22,8 +22,7 @@ export class ReportsPage {
   ) { }
 
   ionViewDidEnter() {
-    this.reportProvider.init()
-    .then((provider) => provider.fetch())
+    this.reportProvider.fetch()
     .then((reports) => {
       console.log('FETCH REPORTS', reports);
       reports.sort((a, b) => {

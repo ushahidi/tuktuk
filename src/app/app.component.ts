@@ -23,9 +23,11 @@ export class Tuktuk {
       this.thaliProvider
         .init()
         .then((thali) => thali.setTeam())
-        .then((thali) => thali.loadComponents())        
+        .then((thali) => thali.loadComponents())
+        .then(() => this.reportProvider.init())
         .then(() => {
           this.rootPage = ReportsPage
+          this.reportProvider.syncThaliLocal()
         })
         .catch(console.log.bind(console));
     });

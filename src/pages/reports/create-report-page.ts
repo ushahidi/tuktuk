@@ -61,16 +61,14 @@ export class CreateReportPage {
   takePicture() {
     Camera.getPicture({
       destinationType: Camera.DestinationType.DATA_URL,
-      targetWidth: 360,
-      targetHeight: 360
+      targetWidth: 640,
+      targetHeight: 640
     })
       .then((imageData) => {
         this.imageData = imageData;
         this.photo = `data:image/jpeg;base64,${imageData}`;
       })
-      .catch((error) => {
-        console.error(error)
-      });
+      .catch((error) => console.error(error));
   }
 
 }

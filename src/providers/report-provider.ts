@@ -23,10 +23,8 @@ export class ReportProvider {
     .get('isThaliInitialized')
     .then((isThaliInitialized) => {
       return new Promise((resolve, reject) => {
-        if (isThaliInitialized) {
-          // hard code this for android
+        if (isThaliInitialized) {          
           this.store = new PouchDB('tuktuk')
-          // this.store = new PouchDB('http://127.0.0.1:8424/tuktuk', { ajax: { cache:false, withCredentials: false}})
           this.store.info()
           .then((info) => {
             console.log('CONNECTED TO THALI STORE .. go fish')
@@ -39,8 +37,9 @@ export class ReportProvider {
     })
   }
 
-  public syncRemote() {
-    this.remote = 'http://127.0.0.1:5984/tuktuk';
+  public syncThaliLocal() {
+    // this.remote = new PouchDB('http://127.0.0.1:8424/tuktuk', { ajax: { cache:false, withCredentials: false}});
+    this.remote = 'http://127.0.0.1:8424/tuktuk';
     let options = {
       since: 'now',
       live: true,
@@ -50,7 +49,25 @@ export class ReportProvider {
       binary: true,
       batch_size: 40
     };
-    this.store.sync(this.remote, options);
+    this.store.sync(this.remote, options)
+    .on('change',  (info) => {
+      console.log('SYNC HAPPENED ..', info)
+    })
+    .on('paused', (err) => {
+      console.log('PAUSED SYNC', err)
+    })
+    .on('active', ()=> {
+      console.log('REMOTE SYNC ACTIVE')
+    })
+    .on('denied',  (err) => {
+      console.error('DENIED SYNC', err)
+    })
+    .on('complete',(info)=>{
+      console.info('REMOTE SYNC COMPLETE')
+    })
+    .on('error', (err) => {
+      console.error(err)
+    });
     console.log('REMOTE SYNC INITIALIZED')
   }
 
@@ -70,6 +87,7 @@ export class ReportProvider {
           if (row.doc._attachments) {
             row.doc.photo = `data:image/jpeg;base64,${row.doc._attachments['att.txt'].data}`;
           }
+          row.doc.team = (row.doc.deviceId == 1)?'Team One': 'Team Two'
           this.reports.push(row.doc);
         });
 
