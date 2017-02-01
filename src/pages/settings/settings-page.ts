@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Storage } from '@ionic/storage';
-import { ReportProvider, ThaliProvider } from '../../providers'
+import { DataService } from '../../providers'
 
 @Component({
   selector: 'page-settings',
@@ -16,30 +16,32 @@ export class SettingsPage {
   constructor(
     public navCtrl: NavController,
     public formBuilder: FormBuilder,
-    private settings: Storage,
-    private thaliProvider: ThaliProvider,
-    private reportProvider: ReportProvider
+    private configs: Storage,
+    private data: DataService
   ) {}
 
-  ionViewDidLoad() {
+  ionViewWillEnter() {
     console.log('SETTINGS', this)
-    this.settingsForm = this.formBuilder.group({
-      mode: this.thaliProvider.mode
+    this.configs.get('isThaliPeerRunning')
+    .then((isThaliPeerRunning)=>{
+      this.isThaliPeerRunning = isThaliPeerRunning;
+      this.settingsForm = this.formBuilder.group({
+        isThaliPeerRunning: isThaliPeerRunning
+      })
     })
-    this.isThaliPeerRunning = this.thaliProvider.isThaliPeerRunning;
   }
 
-  save() {
-    console.log('SETTINGS', this.settingsForm.value)
-    this.settings.set('mode', this.settingsForm.value.mode)
-    // this.thaliProvider.init()
-    //   .then((thali) => thali.loadComponents())
-    //   .then((thali) => this.reportProvider.init())
-    this.navCtrl.pop()
-  }
+  // save() {
+  //   console.log('SETTINGS', this.settingsForm.value)
+  //   this.configs.set('mode', this.settingsForm.value.mode)
+  //   // this.thaliProvider.init()
+  //   //   .then((thali) => thali.loadComponents())
+  //   //   .then((thali) => this.reportProvider.init())
+  //   this.navCtrl.pop()
+  // }
 
   setPeerState() {
-    this.settings.set('isThaliPeerRunning', this.isThaliPeerRunning)
-    // this.thaliProvider.switchPeer()
+    this.configs.set('isThaliPeerRunning', this.isThaliPeerRunning)
+    this.data.switchPeer()
   }
 }

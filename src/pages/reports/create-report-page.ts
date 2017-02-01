@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, Events } from 'ionic-angular';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { ReportProvider, ThaliProvider } from '../../providers';
+import { DataService } from '../../providers';
 import { Camera } from 'ionic-native';
 import { ReportsPage } from './reports-page';
 
@@ -22,8 +22,7 @@ export class CreateReportPage {
     public nav: NavController,
     public events: Events,
     public formBuilder: FormBuilder,
-    public reportProvider: ReportProvider,
-    public thaliProvider: ThaliProvider
+    public dataService: DataService,
   ) {
 
     this.reportForm = this.formBuilder.group({
@@ -36,7 +35,7 @@ export class CreateReportPage {
 
   save() {
     this.report = {
-      deviceId: this.thaliProvider.deviceId,
+      deviceId: this.dataService.deviceId,
       description: this.reportForm.value.description,
       address: this.reportForm.value.address,
       dateTime: new Date(`${this.reportForm.value.date} ${this.reportForm.value.time}`).toISOString(),
@@ -53,7 +52,7 @@ export class CreateReportPage {
     }
 
     this
-      .reportProvider
+      .dataService
       .add(this.report)
       .then(()=> this.nav.pop())
   }

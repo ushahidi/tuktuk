@@ -6,6 +6,7 @@ var app = require('express')();
 var cors = require('cors');
 var expressPouchDB = require('express-pouchdb');
 var PouchDB = require('pouchdb');
+var Promise = require('bluebird');
 //
 // // Thali
 var PouchDBGenerator = require('thali/NextGeneration/utils/pouchDBGenerator');
@@ -13,7 +14,7 @@ var ThaliPeerPoolOneAtATime = require('thali/NextGeneration/thaliPeerPool/thaliP
 var ThaliReplicationManager = require('thali/NextGeneration/thaliManager');
 var ThaliMobile = require('thali/NextGeneration/thaliMobile');
 var LeveldownMobile = require('leveldown-mobile');
-var localStore;
+var store;
 var manager;
 var keysToUse;
 
@@ -31,7 +32,7 @@ ecdh2.setPublicKey('BHaqGoN4VGmYUmK2kJ0UME36mBSKfcp9uXYvnxBLvwCLie05ieFCGJI2wGNk
 ecdh2.setPrivateKey('xRqiCIH1ka1omulZOzQxYJsX1IQOZRALu0+3miOuf2I=', 'base64');
 
 
-Mobile('initThali').registerSync(function (deviceId, mode) {
+Mobile('initThali').registerSync((deviceId, mode) => {
   console.log('INIT THALI ...');
   var ecdh;
   var dbPrefix;
@@ -55,7 +56,7 @@ Mobile('initThali').registerSync(function (deviceId, mode) {
     keysToUse = [ecdh1.getPublicKey()];
   }
 
-  Mobile.getDocumentsPath(function(err, location) {
+  Mobile.getDocumentsPath((err, location) => {
     if (err) {
       console.log('Tuktuk Error getting path');
       return;
@@ -77,22 +78,70 @@ Mobile('initThali').registerSync(function (deviceId, mode) {
       console.log('SETUP THALI MANAGER');
       manager = new ThaliReplicationManager( expressPouchDB,PouchDB, 'tuktuk', ecdh, new ThaliPeerPoolOneAtATime(), thaliMode);
 
-      app.use(cors())
-      app.use('/', expressPouchDB(PouchDB));
-      app.listen(8424,() => {
-        console.log('THALI SERVER STARTED AT PORT 8424')
-      });
-      localStore = new PouchDB('tuktuk');
+      // app.use(cors())
+      // app.use('/', expressPouchDB(PouchDB));
+      // app.listen(8424,() => {
+      //   console.log('THALI SERVER STARTED AT PORT 8424')
+      // });
+      store = new PouchDB('tuktuk');
     }
   });
 });
 
-Mobile('startThali').registerSync(function () {
+Mobile('info').registerAsync((message,callback) => {
+  console.log('INFO MESSAGE')
+  console.log(message)
+
+  store.info((err, info) => {
+    if (err) { return console.log(err); }
+    return callback(info)
+  });
+
+});
+
+Mobile('fetch').registerAsync((message, callback) => {
+  console.log('FETCH MESSAGE')
+  console.log(message)
+  store
+  .allDocs({
+    include_docs:true,
+    attachments: true
+  })
+  .then((results) => callback(results))
+});
+
+Mobile('add').registerAsync((data, callback) => {
+  store
+  .post(data)
+  .then((res) => callback(res))
+});
+
+Mobile('startThali').registerSync( () => {
   console.log('THALI PEER START');
   manager.start(keysToUse);
 });
 
-Mobile('stopThali').registerSync(function () {
+Mobile('stopThali').registerSync( () => {
   console.log('THALI PEER STOP');
   manager.stop();
+});
+
+
+process
+.once('uncaughtException', function (error) {
+  console.error(
+    'uncaught exception, error: \'%s\', stack: \'%s\'',
+    error.toString(), error.stack
+  );
+  process.exit(1);
+})
+.once('unhandledRejection', function (error, p) {
+  console.error(
+    'uncaught promise rejection, error: \'%s\', stack: \'%s\'',
+    error.toString(), error.stack
+  );
+  process.exit(2);
+})
+.once('exit', function (code, signal) {
+  console.log('process exited, code: \'%s\', signal: \'%s\'', code, signal);
 });

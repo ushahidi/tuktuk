@@ -9,11 +9,13 @@ export JX_NPM_JXB
 
 ../Thali_CordovaPlugin/thali/install/setUpDesktop.sh
 
+rm -rf thaliDontCheckIn
 mkdir -p thaliDontCheckIn/localdev
-cordova platform rm ios android
-cordova platform add android
+# cordova platform rm ios android
+# cordova platform add android
 
 cd www/jxcore
+rm -rf node_modules
 jx npm install ../../../Thali_CordovaPlugin/thali/ --save --no-optional --autoremove "*.gz"
 
 jx npm install --no-optional --autoremove "*.gz"

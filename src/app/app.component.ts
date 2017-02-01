@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { Platform, LoadingController } from 'ionic-angular';
-// import { StatusBar, Splashscreen, BackgroundMode } from 'ionic-native';
+import { Platform } from 'ionic-angular';
+import { StatusBar, Splashscreen } from 'ionic-native';
 import { ReportsPage } from '../pages/reports';
-import { ReportProvider, ThaliProvider } from '../providers'
+import { DataService } from '../providers'
 
 @Component({
   template: `<ion-nav [root]="rootPage"></ion-nav>`
@@ -11,25 +11,20 @@ export class Tuktuk {
   rootPage: any;
 
   constructor(
-    public platform: Platform,
-    private reportProvider: ReportProvider,
-    private thaliProvider: ThaliProvider,
-    private loading: LoadingController
+    public dataService: DataService,
+    public platform: Platform
   ) {
-    platform.ready().then(() => {
-      // StatusBar.styleDefault();
-      // Splashscreen.hide();
-      // BackgroundMode.enable();
-      this.thaliProvider
-        .init()
-        .then((thali) => thali.setTeam())
-        .then((thali) => thali.loadComponents())
-        .then(() => this.reportProvider.init())
-        .then(() => {
-          this.rootPage = ReportsPage
-          this.reportProvider.syncThaliLocal()
-        })
-        .catch(console.log.bind(console));
+    this.dataService.start()
+    .then((ds)=>ds.setTeam())
+    .then((ds)=>ds.connect())
+    .then(() =>this.platformReady());
+  }
+
+  platformReady() {
+    this.platform.ready().then(() => {
+      StatusBar.styleDefault();
+      Splashscreen.hide();
+      this.rootPage = ReportsPage
     });
   }
 }
