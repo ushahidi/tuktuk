@@ -17,6 +17,7 @@ var LeveldownMobile = require('leveldown-mobile');
 var store;
 var manager;
 var keysToUse;
+var sync;
 
 console.log('THALI LOADED ................')
 
@@ -86,6 +87,40 @@ Mobile('initThali').registerSync((deviceId, mode) => {
       store = new PouchDB('tuktuk');
     }
   });
+});
+
+Mobile('connectToBRCK').registerAsync((message,callback) => {
+  console.log('INFO MESSAGE')
+  console.log(message)
+
+  sync = PouchDB.replicate(store, 'http://78bbacaa.ngrok.io/tuktuk', {
+    live: true,
+    retry: true
+  }).on('change', function (info) {
+    // handle change
+    return callback(info)
+  }).on('paused', function (err) {
+    // replication paused (e.g. replication up to date, user went offline)
+    return callback(err)
+  }).on('active', function () {
+    // replicate resumed (e.g. new changes replicating, user went back online)
+    return callback('-----')
+  }).on('denied', function (err) {
+    // a document failed to replicate (e.g. due to permissions)
+    return callback(err)
+  }).on('complete', function (info) {
+    // handle complete
+    return callback(info)
+  }).on('error', function (err) {
+    // handle error
+    return callback(err)
+  });
+
+});
+
+Mobile('cancelConnect').registerSync(() => {
+  console.log('CANCEL CONNECT')
+  rep.cancel();
 });
 
 Mobile('info').registerAsync((message,callback) => {

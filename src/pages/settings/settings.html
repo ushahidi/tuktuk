@@ -4,39 +4,14 @@
   </ion-navbar>
 </ion-header>
 <ion-content>
-  <!-- <form id="settingsForm" [formGroup]="settingsForm" (ngSubmit)="save()">
-     <ion-card>
-       <ion-card-header>
-         MODE
-       </ion-card-header>
-     <ion-list radio-group formControlName="mode">
-       <ion-item>
-         <ion-label>Wifi</ion-label>
-         <ion-radio value="wifi"></ion-radio>
-       </ion-item>
-       <ion-item>
-         <ion-label>Native</ion-label>
-         <ion-radio value="native"></ion-radio>
-       </ion-item>
-       <ion-item>
-         <ion-label>Both</ion-label>
-         <ion-radio value="both"></ion-radio>
-       </ion-item>
-     </ion-list>
-     <ion-item>
-     <button ion-button type="submit" form="settingsForm" icon-right clear end>
-       UPDATE
-     </button>
-   </ion-item>
-   </ion-card>
-   </form> -->
-   <ion-card>
-     <ion-card-header>
-        THALI
-      </ion-card-header>
-      <ion-item no-lines>
+   <ion-list>
+      <ion-item>
         <ion-label>Peer Sync</ion-label>
         <ion-toggle [(ngModel)]="isThaliPeerRunning" (ionChange)="setPeerState()"></ion-toggle>
      </ion-item>
-   </ion-card>
+     <ion-item>
+       <ion-label>BRCK Sync</ion-label>
+       <ion-toggle></ion-toggle>       
+    </ion-item>
+   </ion-list>
 </ion-content>

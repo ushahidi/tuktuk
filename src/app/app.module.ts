@@ -18,10 +18,7 @@ export function configStorage() {
     CreateReportPage,
     SettingsPage
   ],
-  imports: [IonicModule.forRoot(Tuktuk, {
-    backButtonText: '',
-    backButtonIcon: 'close'
-  }),ElasticModule],
+  imports: [IonicModule.forRoot(Tuktuk), ElasticModule],
   bootstrap: [IonicApp],
   entryComponents: [
     Tuktuk,

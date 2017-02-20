@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Reports
+      Reports <ion-spinner name="dots" color="activity" *ngIf="isThaliPeerRunning"></ion-spinner>
     </ion-title>
     <ion-buttons end>
       <button ion-button icon-only [navPush]="settings">
@@ -11,7 +11,14 @@
   </ion-navbar>
 </ion-header>
 <ion-content>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <ion-card *ngFor="let report of reports">
+    <ion-card-header >
+      <ion-icon name="ios-contacts" item-left large ></ion-icon>
+      {{report.team}}
+    </ion-card-header>
     <ion-card-content>
       {{report.description}}
     </ion-card-content>
@@ -21,8 +28,8 @@
       <p>{{report.address}}</p>
     </ion-item>
     <ion-item >
-      <ion-icon name="calendar" item-left large ></ion-icon>
-      <p>{{report.dateTime| date:'MMM dd, yyyy'}} {{report.dateTime| date:'h:mm a'}}</p>
+      <ion-icon name="calendar"  small ></ion-icon>
+      {{report.dateTime| date:'MMM dd, yyyy'}} {{report.dateTime| date:'h:mm a'}}
     </ion-item>
   </ion-card>
   <ion-fab right bottom>

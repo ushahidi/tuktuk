@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import { Storage } from '@ionic/storage';
-import { Platform, AlertController, LoadingController } from 'ionic-angular';
+import { Platform, AlertController, LoadingController, ToastController } from 'ionic-angular';
 
 
 @Injectable()
@@ -9,21 +9,28 @@ export class DataService {
 
   public deviceId: any;
   public mode: string;
-  public loader: any;
   public isThaliPeerRunning = false;
   public isThaliInitialized = false;
   public isJXcoreLoaded = false;
   private teamAlert: any;
+  private loader: any;
+  // private toaster: any;
 
   constructor (
     public platform: Platform,
     private config: Storage,
     private alertCtrl: AlertController,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private toastCtrl: ToastController
   ) {
     config.set('isJXcoreLoaded', this.isJXcoreLoaded)
     config.set('isThaliInitialized', this.isThaliInitialized)
     config.set('isThaliPeerRunning', this.isThaliPeerRunning)
+
+    // this.toaster = this.toastCtrl.create({
+    //   message: "Thali peer to peer sync is on",
+    //   position: 'bottom'
+    // })
   }
 
   start() {
@@ -190,10 +197,12 @@ export class DataService {
       if(isThaliPeerRunning) {
         (<any>window).jxcore('startThali').call(() => {
           console.log('THALI PEER HAS STARTED RUNNING')
+          // this.toaster.present();
         });
       } else {
         (<any>window).jxcore('stopThali').call(() => {
           console.log('THALI PEER HAS STOPPED RUNNING')
+          // this.toaster.dismiss()
         });
       }
     })

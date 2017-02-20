@@ -23,22 +23,10 @@ export class SettingsPage {
   ionViewWillEnter() {
     console.log('SETTINGS', this)
     this.configs.get('isThaliPeerRunning')
-    .then((isThaliPeerRunning)=>{
+    .then((isThaliPeerRunning) => {
       this.isThaliPeerRunning = isThaliPeerRunning;
-      this.settingsForm = this.formBuilder.group({
-        isThaliPeerRunning: isThaliPeerRunning
-      })
     })
   }
-
-  // save() {
-  //   console.log('SETTINGS', this.settingsForm.value)
-  //   this.configs.set('mode', this.settingsForm.value.mode)
-  //   // this.thaliProvider.init()
-  //   //   .then((thali) => thali.loadComponents())
-  //   //   .then((thali) => this.reportProvider.init())
-  //   this.navCtrl.pop()
-  // }
 
   setPeerState() {
     this.configs.set('isThaliPeerRunning', this.isThaliPeerRunning)
